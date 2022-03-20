@@ -883,7 +883,7 @@ require 'sweet-moon'
 
 begin
   SweetMoon.global.state.eval('return 1 + true')
-rescue SweetMoon::Errors::LuaSyntaxError => error
+rescue SweetMoon::Errors::LuaRuntimeError => error
   puts error.message
   # => [string "return 1 + true"]:1: attempt to perform arithmetic on a boolean value
 end
@@ -897,7 +897,7 @@ require 'sweet-moon/errors'
 
 begin
   SweetMoon.global.state.eval('return 1 + true')
-rescue LuaSyntaxError => error
+rescue LuaRuntimeError => error
   puts error.message
   # => [string "return 1 + true"]:1: attempt to perform arithmetic on a boolean value
 end
@@ -905,9 +905,9 @@ end
 
 ## Where can I find .so files?
 
-Due to the Lua's popularity, you likely have it already on your system, and _Sweet Moon_ will be able to find the files on its own.
+Due to the Lua's popularity, you likely have it already on your system, and _Sweet Moon_ will be able to find the files by itself.
 
-Either way, you can download it from this page:
+Either way, you can download it from:
 - [Lua Binaries](http://luabinaries.sourceforge.net)
 - [LuaJIT releases](http://luajit.org/download.html)
 
