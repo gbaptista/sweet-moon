@@ -822,8 +822,8 @@ You may want to use an isolated API for scenarios like interacting with two Lua 
 ```ruby
 require 'sweet-moon'
 
-api_5 = SweetMoon.global.config(shared_object: '/usr/lib/liblua5.s')
-api_3 = SweetMoon.global.config(shared_object: '/usr/lib/liblua3.so')
+api_5 = SweetMoon::API.new(shared_object: '/usr/lib/liblua5.s')
+api_3 = SweetMoon::API.new(shared_object: '/usr/lib/liblua3.so')
 
 api_5.luaL_newstate
 
