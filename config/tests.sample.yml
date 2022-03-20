@@ -1,0 +1,15 @@
+luarocks:
+  - /home/me/.luarocks/share/lua/5.4/?.lua
+  - /home/me/.luarocks/share/lua/5.4/?/init.lua
+  - /home/me/.luarocks/lib/lua/5.4/?.so
+
+5.4.4:
+  description: 'Lua 5.4.4 + Fennel 1.0.0'
+  shared_object: /resources/liblua.so.5.4.4
+  fennel: /resources/fennel.lua
+
+4.0.1:
+  description: 'Lua 4.0.1'
+  shared_objects:
+    - /resources/liblua.so.4.0.1
+    - /resources/liblualib.so.4.0.1

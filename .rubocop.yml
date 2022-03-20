@@ -1,0 +1,40 @@
+AllCops:
+  TargetRubyVersion: 2.5.0
+  NewCops: enable
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 86
+  Exclude: ['spec/**/*', 'logic/signatures/*']
+
+Style/MixinUsage:
+  Exclude: ['ports/in/dsl/sweet-moon/errors.rb']
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  IgnoredMethods: ['describe', 'context', 'it']
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Naming/ConstantName:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/LambdaCall:
+  Enabled: false
+
+Naming/FileName:
+  Enabled: false
