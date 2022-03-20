@@ -38,6 +38,43 @@ RSpec.describe do
     end
   end
 
+  context 'Different Interpreters' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state50 = SweetMoon::State.new(shared_object: config['5.0.3']['shared_object'])
+      state51 = SweetMoon::State.new(shared_object: config['5.1.5']['shared_object'])
+      state54 = SweetMoon::State.new(shared_object: config['5.4.2']['shared_object'])
+
+      expect(state50.meta.interpreter).to eq('5.0')
+      expect(state51.meta.interpreter).to eq('5.1')
+      expect(state54.meta.interpreter).to eq('5.4')
+
+      expect(state50.eval('return _VERSION')).to eq('Lua 5.0.3')
+      expect(state51.eval('return _VERSION')).to eq('Lua 5.1')
+      expect(state54.eval('return _VERSION')).to eq('Lua 5.4')
+
+      expect(state50.eval('return 1 + 1')).to eq(2)
+      expect(state51.eval('return 1 + 1')).to eq(2)
+      expect(state54.eval('return 1 + 1')).to eq(2)
+
+      expect { state50.eval('return 1 + true') }.to raise_error(
+        an_instance_of(SweetMoon::Errors::LuaRuntimeError),
+        '[string "return 1 + true"]:1: attempt to perform arithmetic on a boolean value'
+      )
+
+      expect { state51.eval('return 1 + true') }.to raise_error(
+        an_instance_of(SweetMoon::Errors::LuaRuntimeError),
+        '[string "return 1 + true"]:1: attempt to perform arithmetic on a boolean value'
+      )
+
+      expect { state54.eval('return 1 + true') }.to raise_error(
+        an_instance_of(SweetMoon::Errors::LuaRuntimeError),
+        '[string "return 1 + true"]:1: attempt to perform arithmetic on a boolean value'
+      )
+    end
+  end
+
   context 'Lua Errors' do
     it do
       config = YAML.load_file('config/tests.yml')
