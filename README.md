@@ -1,4 +1,5 @@
 # Sweet Moon
+[![Gem Version](https://badge.fury.io/rb/sweet-moon.svg)](https://badge.fury.io/rb/sweet-moon)
 
 _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.lua.org) / [Fennel](https://fennel-lang.org) from [Ruby](https://www.ruby-lang.org) and vice versa a delightful experience.
 
