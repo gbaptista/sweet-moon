@@ -683,7 +683,7 @@ For global:
 ```ruby
 require 'sweet-moon'
 
-SweetMoon.global.config.new(
+SweetMoon.global.config(
   package_path: [
     '/home/me/.luarocks/share/lua/5.4/?.lua',
     '/home/me/.luarocks/share/lua/5.4/?/init.lua'
