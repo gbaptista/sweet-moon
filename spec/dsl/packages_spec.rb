@@ -12,6 +12,9 @@ RSpec.describe do
       expect(state.eval('return 1 + 2')).to eq(3)
 
       expect(state.add_package_path(config['5.4.2']['fennel'])).to eq(nil)
+
+      expect(state.package_path).to include(config['5.4.2']['fennel'])
+
       expect(state.eval('return 1 + 2')).to eq(3)
 
       expect(state.require_module(:fennel)).to eq(nil)
@@ -54,16 +57,6 @@ RSpec.describe do
 
       expect(state.require_module_as('fennel', 'f')).to eq(nil)
 
-      expect(state.package_path).to eq(
-        ['/usr/local/share/lua/5.4/?.lua',
-         '/usr/local/share/lua/5.4/?/init.lua',
-         '/usr/local/lib/lua/5.4/?.lua',
-         '/usr/local/lib/lua/5.4/?/init.lua',
-         './?.lua',
-         './?/init.lua',
-         '/home/gbaptista/sm-resources/fennel-100.lua']
-      )
-
       expect(state.eval('return f.eval("(+ 2 3)");')).to eq(5)
 
       expect(state.get(:f, :version)).to eq('1.0.0')
@@ -74,14 +67,7 @@ RSpec.describe do
       expect(state.get(:f, :eval).(['(+ 2 2)'])).to eq(4)
 
       expect(state.add_package_cpath('/lib/lib.so')).to eq(nil)
-      expect(state.package_cpath).to eq(
-        ['/usr/local/lib/lua/5.4/?.so',
-         '/usr/local/lib/lua/5.4/loadall.so',
-         './?.so',
-         '/usr/local/lib/lua/5.4/lib?54.so',
-         './lib?54.so',
-         '/lib/lib.so']
-      )
+      expect(state.package_cpath).to include('/lib/lib.so')
     end
   end
 
@@ -95,24 +81,9 @@ RSpec.describe do
         package_cpath: 'lib.so'
       )
 
-      expect(state.package_path).to eq(
-        ['/usr/local/share/lua/5.4/?.lua',
-         '/usr/local/share/lua/5.4/?/init.lua',
-         '/usr/local/lib/lua/5.4/?.lua',
-         '/usr/local/lib/lua/5.4/?/init.lua',
-         './?.lua',
-         './?/init.lua',
-         'fennel.lua']
-      )
+      expect(state.package_path).to include('fennel.lua')
 
-      expect(state.package_cpath).to eq(
-        ['/usr/local/lib/lua/5.4/?.so',
-         '/usr/local/lib/lua/5.4/loadall.so',
-         './?.so',
-         '/usr/local/lib/lua/5.4/lib?54.so',
-         './lib?54.so',
-         'lib.so']
-      )
+      expect(state.package_cpath).to include('lib.so')
     end
   end
 
@@ -128,24 +99,9 @@ RSpec.describe do
         package_cpath: 'lib.so'
       )
 
-      expect(SweetMoon.global.state.package_path).to eq(
-        ['/usr/local/share/lua/5.4/?.lua',
-         '/usr/local/share/lua/5.4/?/init.lua',
-         '/usr/local/lib/lua/5.4/?.lua',
-         '/usr/local/lib/lua/5.4/?/init.lua',
-         './?.lua',
-         './?/init.lua',
-         'fennel.lua']
-      )
+      expect(SweetMoon.global.state.package_path).to include('fennel.lua')
 
-      expect(SweetMoon.global.state.package_cpath).to eq(
-        ['/usr/local/lib/lua/5.4/?.so',
-         '/usr/local/lib/lua/5.4/loadall.so',
-         './?.so',
-         '/usr/local/lib/lua/5.4/lib?54.so',
-         './lib?54.so',
-         'lib.so']
-      )
+      expect(SweetMoon.global.state.package_cpath).to include('lib.so')
     end
   end
 end

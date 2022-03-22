@@ -33,14 +33,14 @@ RSpec.describe do
         api_reference: '5.4.2',
         interpreter: '5.4',
         runtime: 'Fennel 1.0.0 on Lua 5.4',
-        shared_objects: ['/home/gbaptista/sm-resources/liblua.so.5.4.2']
+        shared_objects: [config['5.4.2']['shared_object']]
       )
 
       expect(fennel.meta.api_reference).to eq('5.4.2')
       expect(fennel.meta.interpreter).to eq('5.4')
       expect(fennel.meta.runtime).to eq('Fennel 1.0.0 on Lua 5.4')
       expect(fennel.meta.shared_objects).to eq(
-        ['/home/gbaptista/sm-resources/liblua.so.5.4.2']
+        [config['5.4.2']['shared_object']]
       )
     end
   end
@@ -77,14 +77,14 @@ RSpec.describe do
         api_reference: '5.4.2',
         interpreter: '5.4',
         runtime: 'Fennel 1.0.0 on Lua 5.4',
-        shared_objects: ['/home/gbaptista/sm-resources/liblua.so.5.4.2']
+        shared_objects: [config['5.4.2']['shared_object']]
       )
 
       expect(fennel.meta.api_reference).to eq('5.4.2')
       expect(fennel.meta.interpreter).to eq('5.4')
       expect(fennel.meta.runtime).to eq('Fennel 1.0.0 on Lua 5.4')
       expect(fennel.meta.shared_objects).to eq(
-        ['/home/gbaptista/sm-resources/liblua.so.5.4.2']
+        [config['5.4.2']['shared_object']]
       )
     end
   end

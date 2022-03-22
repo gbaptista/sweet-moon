@@ -76,6 +76,18 @@ RSpec.describe do
     end
   end
 
+  context 'lfs', skip: true do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state = SweetMoon::State.new(shared_object: config['5.4.2']['shared_object'])
+
+      config['luarocks'].each { |path| state.add_package_path(path) }
+
+      state.eval('lfs = require("lfs")')
+    end
+  end
+
   context 'dkjson' do
     it do
       config = YAML.load_file('config/tests.yml')
