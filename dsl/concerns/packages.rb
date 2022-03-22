@@ -9,7 +9,7 @@ module DSL
         paths = path
         paths = [path] unless paths.is_a? Array
 
-        self.eval("#{target} = #{target} .. \";#{paths.join(';')}\"")
+        self.eval("#{target} = \"#{paths.join(';')};\" .. #{target}")
       end
 
       def package_path(target = 'package.path')
