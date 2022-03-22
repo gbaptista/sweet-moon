@@ -27,6 +27,7 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
 - [Fennel](#fennel)
   - [Fennel Usage](#fennel-usage)
   - [Fennel Setup](#fennel-setup)
+  - [Integration with fnx](#integration-with-fnx)
 - [Global vs Isolated](#global-vs-isolated)
 - [Error Handling](#error-handling)
 - [Where can I find .so files?](#where-can-i-find-so-files)
@@ -553,8 +554,8 @@ require 'sweet-moon'
 
 state = SweetMoon::State.new
 
-state.eval('package.path = package.path .. ";/my-modules/?.lua"')
-state.eval('package.cpath = package.cpath .. ";/my-modules/?.so"')
+state.eval('package.path = "/my-modules/?.lua;" .. package.path')
+state.eval('package.cpath = "/my-modules/?.so;" .. package.cpath')
 
 state.eval('some_package = require("my_module")')
 ```
@@ -782,6 +783,28 @@ require 'sweet-moon'
 SweetMoon.global.config(package_path: '/folder/fennel.lua')
 
 SweetMoon.global.state.fennel.eval('(+ 1 1)') # => 2
+```
+
+### Integration with fnx
+
+[fnx](https://github.com/gbaptista/fnx) is a package manager for the Fennel language.
+
+After installing `fnx` and configuring it for [_Embedding_](https://github.com/gbaptista/fnx#embedding), you can:
+
+```ruby
+require 'sweet-moon'
+
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval('(let [fnx (require :fnx)] (fnx.bootstrap!))')
+```
+
+Done. It will automatically inject all your dependencies according to your `.fnx.fnl` file, similar to using the `fnx` command.
+
+To enforce the path for the `.fnx.fnl` file:
+
+```ruby
+fennel.eval('(let [fnx (require :fnx)] (fnx.bootstrap! "/project/.fnx.fnl"))')
 ```
 
 ## Global vs Isolated
