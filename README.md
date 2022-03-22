@@ -40,6 +40,9 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
     - [Lua 5.4](#lua-54)
     - [Lua 4.0](#lua-40)
 - [Development](#development)
+  - [Tests Setup](#tests-setup)
+  - [Running](#running)
+  - [Supporting New Versions](#supporting-new-versions)
 
 ## Supported Versions
 
@@ -1162,6 +1165,26 @@ rubocop -a
 rspec
 ```
 
+### Tests Setup
+
+To setup tests:
+
+```
+cp config/tests.sample.yml config/tests.yml
+```
+
+Clone the [sweet-moon-test](https://github.com/gbaptista/sweet-moon-test) repo somewhere:
+
+```sh
+git clone git@github.com:gbaptista/sweet-moon-test.git
+```
+
+Update the `config/tests.yml` accordingly.
+
+Alternatively: Find or build the _Shared Objects_ for your Operational System on your own.
+
+### Running
+
 ```sh
 ./ports/in/shell/sweet-moon version
 
@@ -1171,3 +1194,21 @@ bundle exec sweet-moon signatures /lua/lib/542 542.rb
 
 bundle exec ruby some/file.rb
 ```
+
+### Supporting New Versions
+
+Download both the source code and the libraries.
+
+Example: For [Lua 5.4.2](https://sourceforge.net/projects/luabinaries/files/5.4.2/), you would download _"Linux Libraries"_ and _"Docs and Sources."_
+
+Extract everything to a folder, e.g., `lua-542-source-libs`.
+
+Run the command to extract the signatures:
+
+```shell
+bundle exec sweet-moon signatures /home/me/lua-542-source-libs 542.rb
+```
+
+Check the `542.rb` file for the output and then start coding.
+
+You can use the [`logic/signatures`](https://github.com/gbaptista/sweet-moon/tree/main/logic/signatures) folder as a reference starting point.
