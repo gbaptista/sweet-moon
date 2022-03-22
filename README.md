@@ -1181,7 +1181,7 @@ git clone git@github.com:gbaptista/sweet-moon-test.git
 
 Update the [`config/tests.yml`](https://github.com/gbaptista/sweet-moon/blob/main/config/tests.sample.yml) accordingly.
 
-Alternatively: Find or build the _Shared Objects_ for your Operational System on your own.
+Alternatively: Find or build the _Shared Objects_ for your Operating System on your own.
 
 ### Running
 
