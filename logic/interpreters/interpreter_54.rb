@@ -12,11 +12,11 @@ module Logic
 
       # lua_isinteger lua_pushinteger lua_tointeger
       requires: %i[
-        lua_close lua_createtable lua_getfield lua_getglobal lua_gettop lua_next
-        lua_pcall lua_pushboolean lua_pushcclosure lua_pushnil lua_pushnumber
-        lua_pushstring lua_rawgeti lua_setglobal lua_settable lua_settop lua_toboolean
-        lua_tonumber lua_topointer lua_tostring lua_type lua_typename luaL_loadfile
-        luaL_loadstring luaL_newstate luaL_openlibs luaL_ref
+        lua_close lua_createtable lua_getfield lua_gettop lua_next lua_pcall
+        lua_pushboolean lua_pushcclosure lua_pushnil lua_pushnumber lua_pushstring
+        lua_rawgeti lua_settable lua_settop lua_toboolean lua_tonumber lua_topointer
+        lua_tostring lua_type lua_typename luaL_loadfile luaL_loadstring luaL_newstate
+        luaL_openlibs luaL_ref lua_getglobal lua_setglobal
       ],
 
       status: {
