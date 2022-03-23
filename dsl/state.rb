@@ -34,8 +34,10 @@ module DSL
       @controller[:get!].(@api, @interpreter, state, variable, key)[:output]
     end
 
-    def set(variable, value)
-      @controller[:set!].(@api, @interpreter, state, variable, value)[:output]
+    def set(variable, key_or_value, value = nil)
+      @controller[:set!].(
+        @api, @interpreter, state, variable, key_or_value, value
+      )[:output]
     end
 
     def destroy

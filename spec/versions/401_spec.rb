@@ -29,6 +29,21 @@ RSpec.describe 'Lua 4.0.1' do
     end
   end
 
+  context 'nil state' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state = SweetMoon::State.new(shared_object: config['4.0.1']['shared_object'])
+
+      expect(state.get('nope')).to eq(nil)
+      expect(state.set('a?', 1)).to eq(nil)
+      expect(state.get('a?')).to eq(1)
+
+      expect(state.set(:a, 'a  b')).to eq(nil)
+      expect(state.get(:a)).to eq('a  b')
+    end
+  end
+
   context 'state', skip: true do
     it do
       config = YAML.load_file('config/tests.yml')
@@ -109,6 +124,12 @@ RSpec.describe 'Lua 4.0.1' do
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
       GC.start
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
+
+      expect(state.set(:my, {})).to eq(nil)
+      expect(state.set(:my, :a, 2)).to eq(nil)
+      expect(state.get(:my, :a)).to eq(2.0)
+      expect(state.set(:_G, :gba, 3)).to eq(nil)
+      expect(state.get(:_G, :gba)).to eq(3.0)
     end
   end
 end
