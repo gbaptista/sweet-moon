@@ -7,26 +7,26 @@ module Component
       push!: ->(api, state, value) {
         case Writer[:_to_lua_type].(value)
         when 'string'
-          api.lua_pushstring(state, value.to_s)
+          api.lua_pushstring(state[:lua], value.to_s)
         when 'number'
-          api.lua_pushnumber(state, value)
+          api.lua_pushnumber(state[:lua], value)
         when 'integer'
           if api.respond_to? :lua_pushinteger
-            api.lua_pushinteger(state, value)
+            api.lua_pushinteger(state[:lua], value)
           else
-            api.lua_pushnumber(state, value)
+            api.lua_pushnumber(state[:lua], value)
           end
         when 'nil'
-          api.lua_pushnil(state)
+          api.lua_pushnil(state[:lua])
         when 'boolean'
-          api.lua_pushboolean(state, value ? 1 : 0)
+          api.lua_pushboolean(state[:lua], value ? 1 : 0)
         when 'table'
           Table[:push!].(api, state, value)
         when 'function'
           Function[:push!].(api, state, value)
         else
           api.lua_pushstring(
-            state, "#<#{value.class}:0x#{format('%016x', value.object_id)}>"
+            state[:lua], "#<#{value.class}:0x#{format('%016x', value.object_id)}>"
           )
         end
       },
