@@ -1,9 +1,11 @@
 # Available at https://github.com/gbaptista/sweet-moon-test
 
 luarocks:
-  - /home/me/.luarocks/share/lua/5.4/?.lua
-  - /home/me/.luarocks/share/lua/5.4/?/init.lua
-  - /home/me/.luarocks/lib/lua/5.4/?.so
+  path:
+    - /home/me/.luarocks/share/lua/5.4/?.lua
+    - /home/me/.luarocks/share/lua/5.4/?/init.lua
+    - /home/me/.luarocks/lib/lua/5.4/?.so
+  expected: ['supernova', 'dkjson', 'lfs']
 
 jit:2.0.5:
   description: 'Lua Jit 2.0.5 + Fennel 1.0.0'

@@ -12,7 +12,7 @@ RSpec.describe do
         package_path: config['5.4.2']['fennel']
       )
 
-      config['luarocks'].each { |path| state.add_package_path(path) }
+      config['luarocks']['path'].each { |path| state.add_package_path(path) }
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
@@ -51,7 +51,7 @@ RSpec.describe do
 
       state = SweetMoon::State.new(shared_object: config['5.4.2']['shared_object'])
 
-      config['luarocks'].each { |path| state.add_package_path(path) }
+      config['luarocks']['path'].each { |path| state.add_package_path(path) }
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
@@ -82,7 +82,7 @@ RSpec.describe do
 
       state = SweetMoon::State.new(shared_object: config['5.4.2']['shared_object'])
 
-      config['luarocks'].each { |path| state.add_package_path(path) }
+      config['luarocks']['path'].each { |path| state.add_package_path(path) }
 
       state.eval('lfs = require("lfs")')
     end
@@ -94,7 +94,7 @@ RSpec.describe do
 
       state = SweetMoon::State.new(shared_object: config['5.4.2']['shared_object'])
 
-      config['luarocks'].each { |path| state.add_package_path(path) }
+      config['luarocks']['path'].each { |path| state.add_package_path(path) }
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
