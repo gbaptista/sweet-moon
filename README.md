@@ -519,7 +519,9 @@ fennel_eval.(['(+ 1 1)']) # => 2
 
 You can't exchange _local_ variables, only [_global_](https://www.lua.org/pil/1.2.html) ones:
 
-```lua
+```ruby
+require 'sweet-moon'
+
 state = SweetMoon::State.new
 
 state.eval('lua_value = "Lua Text"') # => nil
@@ -763,7 +765,9 @@ state.eval('(+ 1 2)') # => 3
 
 Fennel encourages you to explicitly use the [_`_G`_](https://www.lua.org/manual/5.4/manual.html#pdf-_G) table to access global variables:
 
-```fennel
+```ruby
+require 'sweet-moon'
+
 fennel = SweetMoon::State.new.fennel
 
 fennel.eval('(set _G.a? 2')
@@ -780,7 +784,9 @@ Although older versions have the expression `(global name "value")`, it's deprec
 
 As is [true for Lua](#lua-global-vs-local-variables), you can't exchange _local_ variables, only [_global_](https://www.lua.org/pil/1.2.html) ones:
 
-```fennel
+```ruby
+require 'sweet-moon'
+
 fennel = SweetMoon::State.new.fennel
 
 fennel.eval('(local name "value")')
