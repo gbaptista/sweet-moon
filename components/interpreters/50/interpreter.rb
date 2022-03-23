@@ -86,7 +86,10 @@ module Component
       destroy_state!: ->(api, state) {
         result = api.lua_close(state[:lua])
 
-        { state: nil, error: Interpreter[:_error].(api, state, result) }
+        state.delete(:lua)
+        state.delete(:avoid_gc)
+
+        { state: nil, error: Interpreter[:_error].(api, nil, result) }
       },
 
       _error: ->(api, state, code, options = {}) {
@@ -95,7 +98,7 @@ module Component
         ] || :error
 
         if code.is_a?(Numeric) && code >= 1
-          return { status: status } unless options[:pull]
+          return { status: status } unless options[:pull] && state
 
           { status: status,
             value: Interpreter[:read_and_pop!].(api, state, -1)[:output] }

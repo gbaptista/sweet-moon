@@ -119,6 +119,15 @@ RSpec.describe do
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
       GC.start
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
+
+      from_lua = state.eval('return function (a, b) return a + b; end')
+
+      expect(from_lua.([2, 3])).to eq(5)
+
+      expect(state.eval('return collectgarbage("collect")')).to eq(0)
+      GC.start
+
+      expect(from_lua.([2, 3])).to eq(5)
     end
   end
 end

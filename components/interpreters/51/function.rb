@@ -16,6 +16,8 @@ module Component
           return 1
         }
 
+        state[:avoid_gc] << handler
+
         api.lua_pushcclosure(state[:lua], handler, 0)
       },
 
