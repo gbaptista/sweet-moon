@@ -111,6 +111,11 @@ RSpec.describe do
       expect(state.add_package_path(config['jit:2.0.5']['fennel'])).to eq(nil)
 
       expect(state.fennel.eval('(+ 1 2)')).to eq(3.0)
+
+      expect(state.fennel.set('a/b', 3)).to eq(nil)
+      expect(state.fennel.get('a/b')).to eq(3.0)
+      expect(state.fennel.get('__fnl_global__a_2fb')).to eq(3.0)
+
       expect(state.fennel.meta.runtime).to eq('Fennel 1.0.0 on LuaJIT 2.0.5 (Lua 5.1)')
       expect(state.fennel.meta.to_h[:runtime]).to eq('Fennel 1.0.0 on LuaJIT 2.0.5 (Lua 5.1)')
 

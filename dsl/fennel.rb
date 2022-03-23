@@ -11,9 +11,13 @@ module DSL
         'table.insert(package.loaders or package.searchers, fennel.searcher)'
       )
 
+      # TODO: Makes sense?
+      # debug.traceback = fennel.traceback
+
       @eval = @state.get(:fennel, :eval)
       @dofile = @state.get(:fennel, :dofile)
       @version = @state.get(:fennel, :version)
+      @mangle = @state.get(:fennel, :mangle)
 
       build_meta
     end
@@ -24,6 +28,14 @@ module DSL
 
     def load(path, outputs = 1)
       @dofile.([path], outputs)
+    end
+
+    def get(variable, key = nil)
+      super(@mangle.([variable]), key)
+    end
+
+    def set(variable, value)
+      super(@mangle.([variable]), value)
     end
 
     def build_meta
