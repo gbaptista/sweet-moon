@@ -45,7 +45,7 @@ module Component
 
           tuples << [key[:value], value[:value]]
 
-          break if value[:type] == 'no value'
+          break if value[:type] == 'no value' || key[:value].instance_of?(Proc)
         end
 
         { value: Logic::Tables[:to_hash_or_array].(tuples), pop: true }
@@ -78,7 +78,7 @@ module Component
             break
           end
 
-          break if value[:type] == 'no value'
+          break if value[:type] == 'no value' || key[:value].instance_of?(Proc)
         end
 
         api.lua_settop(state[:lua], -2)

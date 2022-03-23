@@ -21,11 +21,13 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
     - [Tables, Arrays, and Hashes](#tables-arrays-and-hashes)
     - [Functions](#functions)
     - [Other Types](#other-types)
+    - [Lua Global vs Local Variables](#lua-global-vs-local-variables)
   - [_destroy_ and _clear_](#destroy-and-clear)
 - [Modules, Packages and LuaRocks](#modules-packages-and-luarocks)
   - [Integration with LuaRocks](#integration-with-luarocks)
 - [Fennel](#fennel)
   - [Fennel Usage](#fennel-usage)
+  - [Fennel Global vs Local Variables](#fennel-global-vs-local-variables)
   - [Fennel Setup](#fennel-setup)
   - [Integration with fnx](#integration-with-fnx)
 - [Global vs Isolated](#global-vs-isolated)
@@ -209,6 +211,7 @@ Compared to: [rufus-lua](https://github.com/jmettraux/rufus-lua), [YAML](https:/
   - [Tables, Arrays, and Hashes](#tables-arrays-and-hashes)
   - [Functions](#functions)
   - [Other Types](#other-types)
+  - [Lua Global vs Local Variables](#lua-global-vs-local-variables)
 - [_destroy_ and _clear_](#destroy-and-clear)
 
 ### Setup
@@ -512,6 +515,22 @@ fennel_eval = state.get(:fennel_eval)
 fennel_eval.(['(+ 1 1)']) # => 2
 ```
 
+#### Lua Global vs Local Variables
+
+You can't exchange _local_ variables, only [_global_](https://www.lua.org/pil/1.2.html) ones:
+
+```lua
+state = SweetMoon::State.new
+
+state.eval('lua_value = "Lua Text"') # => nil
+
+state.get('lua_value') # => 'Lua Text'
+
+state.eval('local lua_b = "b"') # => nil
+
+state.get('lua_b') # => nil
+```
+
 ## _destroy_ and _clear_
 
 You can destroy a state:
@@ -714,8 +733,8 @@ state = SweetMoon::State.new
 
 state.fennel.eval('(+ 1 2)') # => 3
 
-state.fennel.eval('(global mySum (fn [a b] (+ a b)))')
-state.fennel.eval('(mySum 2 3)') # => 5
+state.fennel.eval('(set _G.mySum (fn [a b] (+ a b)))')
+state.fennel.eval('(_G.mySum 2 3)') # => 5
 
 mySum = state.fennel.get(:mySum)
 
@@ -725,7 +744,7 @@ sum_list = -> (list) { list.sum }
 
 state.set('sumList', sum_list) # => nil
 
-state.fennel.eval('(sumList [2 3 5])') # => 10
+state.fennel.eval('(_G.sumList [2 3 5])') # => 10
 
 state.fennel.load('file.fnl')
 ```
@@ -738,6 +757,39 @@ require 'sweet-moon'
 state = SweetMoon::State.new.fennel
 
 state.eval('(+ 1 2)') # => 3
+```
+
+### Fennel Global vs Local Variables
+
+Fennel encourages you to explicitly use the [_`_G`_](https://www.lua.org/manual/5.4/manual.html#pdf-_G) table to access global variables:
+
+```fennel
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval('(set _G.a? 2')
+
+fennel.get('a?') # => 2
+fennel.get('_G', 'a?') # => 2
+
+fennel.set('b', 3)
+
+fennel.eval('(print _G.b') # => 3
+```
+
+Although older versions have the expression `(global name "value")`, it's deprecated, and you should avoid using that. _Sweet Moon_ has no commitments in supporting this deprecated expression, and you should prefer the `_G` way.
+
+As is [true for Lua](#lua-global-vs-local-variables), you can't exchange _local_ variables, only [_global_](https://www.lua.org/pil/1.2.html) ones:
+
+```fennel
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval('(local name "value")')
+
+fennel.get('name') # => nil
+
+fennel.eval('(set _G.name "value")')
+
+fennel.get('name') # => "value"
 ```
 
 ### Fennel Setup

@@ -31,8 +31,13 @@ module Component
         { state: state, error: Interpreter[:_error].(api, state, result, pull: true) }
       },
 
-      set_table!: ->(api, state, variable, value) {
-        Table[:set!].(api, state, variable, value)
+      set_table!: ->(api, state) {
+        result = api.lua_settable(state[:lua], -3)
+
+        api.lua_settop(state[:lua], -2)
+
+        { state: state,
+          error: Interpreter[:_error].(api, state, result, pull: false) }
       },
 
       push_value!: ->(api, state, value) {
@@ -60,7 +65,7 @@ module Component
           end
         end
 
-        { state: state }
+        { state: state, extra_pop: true }
       },
 
       call!: ->(api, state, inputs = 0, outputs = 1) {

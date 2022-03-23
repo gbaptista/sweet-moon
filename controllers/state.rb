@@ -26,23 +26,48 @@ module Controller
     },
 
     get!: ->(api, interpreter, state, variable, key = nil) {
+      if key.nil?
+        key = variable
+        variable = '_G'
+      end
+
+      State[:_get_key!].(api, interpreter, state, variable, key)
+    },
+
+    _get_key!: ->(api, interpreter, state, variable, key) {
       result = State[:_check!].(
         interpreter[:get_variable_and_push!].(api, state, variable, key)
       )
 
-      result = State[:_check!].(interpreter[:read_and_pop!].(
-                                  api, result[:state], -1, extra_pop: !key.nil?
-                                ))
+      result = State[:_check!].(
+        interpreter[:read_and_pop!].(
+          api, result[:state], -1, extra_pop: result[:extra_pop]
+        )
+      )
 
       { state: result[:state], output: result[:output] }
     },
 
-    set!: ->(api, interpreter, state, variable, value) {
-      result = State[:_check!].(interpreter[:push_value!].(api, state, value))
+    set!: ->(api, interpreter, state, variable, key_or_value, value = nil) {
+      if value.nil?
+        result = State[:_check!].(interpreter[:push_value!].(api, state,
+                                                             key_or_value))
 
-      result = State[:_check!].(
-        interpreter[:pop_and_set_as!].(api, result[:state], variable.to_s)
-      )
+        result = State[:_check!].(
+          interpreter[:pop_and_set_as!].(api, result[:state], variable.to_s)
+        )
+      else
+        result = State[:_check!].(
+          interpreter[:get_variable_and_push!].(api, state, variable)
+        )
+
+        result = State[:_check!].(interpreter[:push_value!].(api, result[:state],
+                                                             key_or_value))
+        result = State[:_check!].(interpreter[:push_value!].(api, result[:state],
+                                                             value))
+
+        result = State[:_check!].(interpreter[:set_table!].(api, result[:state]))
+      end
 
       { state: result[:state], output: result[:output] }
     },

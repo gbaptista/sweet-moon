@@ -6,6 +6,7 @@ module Logic
       LUA_REGISTRYINDEX: -10_000,
       LUA_GLOBALSINDEX: -10_001,
 
+      # lua_isinteger lua_pushinteger lua_tointeger
       requires: %i[
         lua_close lua_gettable lua_gettop lua_insert lua_newtable lua_next lua_open
         lua_pcall lua_pushboolean lua_pushcclosure lua_pushnil lua_pushnumber

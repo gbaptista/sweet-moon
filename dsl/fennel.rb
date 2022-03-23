@@ -11,6 +11,9 @@ module DSL
         'table.insert(package.loaders or package.searchers, fennel.searcher)'
       )
 
+      # TODO: Makes sense?
+      # debug.traceback = fennel.traceback
+
       @eval = @state.get(:fennel, :eval)
       @dofile = @state.get(:fennel, :dofile)
       @version = @state.get(:fennel, :version)
