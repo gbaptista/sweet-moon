@@ -115,7 +115,7 @@ RSpec.describe do
       expect(state.fennel.meta.runtime).to eq('Fennel 1.0.0 on Lua 5.4')
       expect(state.fennel.meta.to_h[:runtime]).to eq('Fennel 1.0.0 on Lua 5.4')
 
-      expect(state.set(:gcSum, ->(a, b) { a + b})).to eq(nil)
+      expect(state.set(:gcSum, ->(a, b) { a + b })).to eq(nil)
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
       GC.start
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)

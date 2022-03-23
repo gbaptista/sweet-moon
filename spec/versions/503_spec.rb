@@ -120,7 +120,7 @@ RSpec.describe do
         'package.path requires Lua >= 5.1 or LuaJIT >= 2; Current: Lua 5.0.3 (5.0)'
       )
 
-      expect(state.set(:gcSum, ->(a, b) { a + b})).to eq(nil)
+      expect(state.set(:gcSum, ->(a, b) { a + b })).to eq(nil)
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
       GC.start
       expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
