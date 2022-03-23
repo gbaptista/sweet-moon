@@ -8,15 +8,16 @@ module Component
   module V50
     Reader = {
       read_all!: ->(api, state) {
-        (1..api.lua_gettop(state)).map do
+        (1..api.lua_gettop(state[:lua])).map do
           Interpreter[:read_and_pop!].(api, state)[:output]
         end.reverse
       },
 
       read!: ->(api, state, stack_index = -1) {
-        stack_index = api.lua_gettop(state) if stack_index == -1
+        stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
 
-        type = api.lua_typename(state, api.lua_type(state, stack_index)).read_string
+        type = api.lua_typename(state[:lua],
+                                api.lua_type(state[:lua], stack_index)).read_string
 
         case type
         when 'string'
@@ -36,29 +37,30 @@ module Component
         else
           # none nil boolean lightuserdata number
           # string table function userdata thread
-          { value: "#{type}: 0x#{api.lua_topointer(state, stack_index).address}",
+          { value:
+              "#{type}: 0x#{api.lua_topointer(state[:lua], stack_index).address}",
             type: type, pop: true }
         end
       },
 
       read_string!: ->(api, state, stack_index) {
-        { value: api.lua_tostring(state, stack_index).read_string,
+        { value: api.lua_tostring(state[:lua], stack_index).read_string,
           pop: true }
       },
 
       read_number!: ->(api, state, stack_index) {
         if api.respond_to?(:lua_isinteger) &&
            api.respond_to?(:lua_tointeger) &&
-           api.lua_isinteger(state, stack_index) == 1
+           api.lua_isinteger(state[:lua], stack_index) == 1
 
-          return { value: api.lua_tointeger(state, stack_index), pop: true }
+          return { value: api.lua_tointeger(state[:lua], stack_index), pop: true }
         end
 
-        { value: api.lua_tonumber(state, stack_index), pop: true }
+        { value: api.lua_tonumber(state[:lua], stack_index), pop: true }
       },
 
       read_boolean!: ->(api, state, stack_index) {
-        { value: api.lua_toboolean(state, stack_index) == 1, pop: true }
+        { value: api.lua_toboolean(state[:lua], stack_index) == 1, pop: true }
       }
     }
   end
