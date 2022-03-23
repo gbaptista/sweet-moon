@@ -104,6 +104,11 @@ RSpec.describe 'Lua 4.0.1' do
       expect { state.add_package_path('/?.lua') }.to raise_error(
         SweetMoon::Errors::SweetMoonError, 'package.path requires Lua >= 5.1'
       )
+
+      expect(state.set(:gcSum, ->(a, b) { a + b})).to eq(nil)
+      expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
+      GC.start
+      expect(state.eval('return gcSum(1, 2)')).to eq(3.0)
     end
   end
 end
