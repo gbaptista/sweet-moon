@@ -1,6 +1,6 @@
 # Available at https://github.com/gbaptista/sweet-moon-test
 
-fennel-dev: '/home/me/sweet-moon-test/dev/fennel.lua'
+fennel-dev: '/home/me/sweet-moon-test/fennel/dev/fennel.lua'
 
 luarocks:
   path:
@@ -12,32 +12,32 @@ luarocks:
 jit:2.0.5:
   description: 'Lua Jit 2.0.5 + Fennel 1.0.0'
   shared_object: /home/me/sweet-moon-test/libluajit.so.2.0.5
-  fennel: /home/me/sweet-moon-test/fennel-100.lua
+  fennel: /home/me/sweet-moon-test/fennel/100/fennel.lua
 
 5.4.4:
   description: 'Lua 5.4.4 + Fennel 1.0.0'
   shared_object: /home/me/sweet-moon-test/liblua.so.5.4.4
-  fennel: /home/me/sweet-moon-test/fennel-100.lua
+  fennel: /home/me/sweet-moon-test/fennel/100/fennel.lua
 
 5.4.2:
   description: 'Lua 5.4.2 + Fennel 1.0.0'
   shared_object: /home/me/sweet-moon-test/liblua.so.5.4.2
-  fennel: /home/me/sweet-moon-test/fennel-100.lua
+  fennel: /home/me/sweet-moon-test/fennel/100/fennel.lua
 
 5.3.3:
   description: 'Lua 5.3.3'
   shared_object: /home/me/sweet-moon-test/liblua.so.5.3.3
-  fennel: /home/me/sweet-moon-test/fennel-100.lua
+  fennel: /home/me/sweet-moon-test/fennel/100/fennel.lua
 
 5.2.4:
   description: 'Lua 5.2.4'
   shared_object: /home/me/sweet-moon-test/liblua.so.5.2.4
-  fennel: /home/me/sweet-moon-test/fennel-100.lua
+  fennel: /home/me/sweet-moon-test/fennel/100/fennel.lua
 
 5.1.5:
   description: 'Lua 5.1.5'
   shared_object: /home/me/sweet-moon-test/liblua.so.5.1.5
-  fennel: /home/me/sweet-moon-test/fennel-100.lua
+  fennel: /home/me/sweet-moon-test/fennel/100/fennel.lua
 
 5.0.3:
   description: 'Lua 5.0.3'
