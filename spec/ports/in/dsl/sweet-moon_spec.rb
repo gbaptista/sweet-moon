@@ -2,7 +2,7 @@ require './ports/in/dsl/sweet-moon'
 
 RSpec.describe do
   it do
-    expect(SweetMoon.meta.version).to eq('0.0.3')
+    expect(SweetMoon.meta.version).to eq('0.0.4')
 
     config = YAML.load_file('config/tests.yml')['5.4.4']
 
