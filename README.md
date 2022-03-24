@@ -392,6 +392,20 @@ state.eval('lua_value = {a = "text", b = 1.5, c = true}') # => nil
 state.get(:lua_value, :b) # => 1.5
 ```
 
+With `set`, you can use a second parameter to set a field:
+
+```ruby
+require 'sweet-moon'
+
+state = SweetMoon::State.new
+
+state.set(:myTable, {}) # => nil
+
+state.set(:myTable, :a, 3) # => nil
+
+state.eval('return myTable["a"]') # => 3
+```
+
 Caveats:
 
 - Ruby `Symbol` (e.g. `:value`) is converted to Lua `string`.
@@ -770,14 +784,14 @@ require 'sweet-moon'
 
 fennel = SweetMoon::State.new.fennel
 
-fennel.eval('(set _G.a? 2')
+fennel.eval('(set _G.a? 2)')
 
 fennel.get('a?') # => 2
 fennel.get('_G', 'a?') # => 2
 
 fennel.set('b', 3)
 
-fennel.eval('(print _G.b') # => 3
+fennel.eval('(print _G.b)') # => 3
 ```
 
 Although older versions have the expression `(global name "value")`, it's deprecated, and you should avoid using that. _Sweet Moon_ has no commitments in supporting this deprecated expression, and you should prefer the `_G` way.
@@ -796,6 +810,12 @@ fennel.get('name') # => nil
 fennel.eval('(set _G.name "value")')
 
 fennel.get('name') # => "value"
+
+fennel.set('var-b', 35) # => nil
+
+fennel.eval('var-b') # => nil
+
+fennel.eval('_G.var-b') # => 35
 ```
 
 ### Fennel Setup
