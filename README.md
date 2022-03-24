@@ -612,21 +612,21 @@ state.add_package_path('/home/me/my-lua-modules/?/init.lua')
 
 state.add_package_cpath('/home/me/my-lua-modules/?.so')
 
-state.add_package_path('/home/me/fennel.lua')
+state.add_package_path('/home/me/fennel/?.lua')
 
-state.add_package_cpath('/home/me/lib.so')
+state.add_package_cpath('/home/me/?.so')
 
 state.package_path
 # => ['./?.lua',
  #    './?/init.lua',
  #    '/home/me/my-lua-modules/?.lua',
  #    '/home/me/my-lua-modules/?/init.lua',
- #    '/home/me/fennel.lua']
+ #    '/home/me/fennel/?.lua']
 
 state.package_cpath
 # => ['./?.so',
 #     '/home/me/my-lua-modules/?.so',
-#     '/home/me/lib.so']
+#     '/home/me/?.so']
 ```
 
 Requiring a module:
@@ -646,8 +646,8 @@ You can set packages in State constructors:
 require 'sweet-moon'
 
 SweetMoon::State.new(
-  package_path: '/folder/lib.lua',
-  package_cpath: '/lib/lib.so',
+  package_path: '/folder/lib/?.lua',
+  package_cpath: '/lib/lib/?.so',
 )
 ```
 
@@ -657,8 +657,8 @@ Also, you can add packages through the global config:
 require 'sweet-moon'
 
 SweetMoon.global.config(
-  package_path: '/folder/lib.lua',
-  package_cpath: '/lib/lib.so',
+  package_path: '/folder/lib/?.lua',
+  package_cpath: '/lib/lib/?.so',
 )
 ```
 
@@ -831,7 +831,7 @@ require 'sweet-moon'
 
 state = SweetMoon::State.new
 
-state.add_package_path('/folder/fennel.lua')
+state.add_package_path('/folder/fennel/?.lua')
 
 state.fennel.eval('(+ 1 1)') # => 2
 ```
@@ -841,7 +841,7 @@ With the constructor:
 ```ruby
 require 'sweet-moon'
 
-fennel = SweetMoon::State.new(package_path: '/folder/fennel.lua').fennel
+fennel = SweetMoon::State.new(package_path: '/folder/fennel/?.lua').fennel
 
 fennel.eval('(+ 1 1)') # => 2
 ```
@@ -851,7 +851,7 @@ With global:
 ```ruby
 require 'sweet-moon'
 
-SweetMoon.global.state.add_package_path('/folder/fennel.lua')
+SweetMoon.global.state.add_package_path('/folder/fennel/?.lua')
 
 SweetMoon.global.state.fennel.eval('(+ 1 1)') # => 2
 ```
@@ -861,7 +861,7 @@ Alternatively:
 ```ruby
 require 'sweet-moon'
 
-SweetMoon.global.config(package_path: '/folder/fennel.lua')
+SweetMoon.global.config(package_path: '/folder/fennel/?.lua')
 
 SweetMoon.global.state.fennel.eval('(+ 1 1)') # => 2
 ```
