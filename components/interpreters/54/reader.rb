@@ -7,33 +7,34 @@ require_relative 'table'
 module Component
   module V54
     Reader = {
-      read_all!: ->(api, state) {
+      read_all!: ->(api, state, component) {
         (1..api.lua_gettop(state[:lua])).map do
-          Interpreter[:read_and_pop!].(api, state)[:output]
+          component::Interpreter[:read_and_pop!].(api, state)[:output]
         end.reverse
       },
 
-      read!: ->(api, state, stack_index = -1) {
+      read!: ->(api, state, component, stack_index = -1) {
         stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
 
-        type = api.lua_typename(state[:lua],
-                                api.lua_type(state[:lua], stack_index)).read_string
+        type = api.lua_typename(
+          state[:lua], api.lua_type(state[:lua], stack_index)
+        ).read_string
 
         case type
         when 'string'
-          Reader[:read_string!].(api, state, stack_index)
+          component::Reader[:read_string!].(api, state, stack_index)
         when 'number'
-          Reader[:read_number!].(api, state, stack_index)
+          component::Reader[:read_number!].(api, state, stack_index)
         when 'no value'
           { value: nil, pop: true, type: type }
         when 'nil'
           { value: nil, pop: true }
         when 'boolean'
-          Reader[:read_boolean!].(api, state, stack_index)
+          component::Reader[:read_boolean!].(api, state, stack_index)
         when 'table'
-          Table[:read!].(api, state, stack_index)
+          component::Table[:read!].(api, state, component, stack_index)
         when 'function'
-          Function[:read!].(api, state, stack_index)
+          component::Function[:read!].(api, state, component, stack_index)
         else
           # none nil boolean lightuserdata number
           # string table function userdata thread

@@ -6,56 +6,19 @@ require_relative 'reader'
 module Component
   module V50
     Table = {
-      push!: ->(api, state, list, stack_index = -1) {
-        stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
-
+      create_table!: ->(api, state, _list) {
         api.lua_newtable(state[:lua])
-
-        if list.is_a? Hash
-          list.each_key do |key|
-            Writer[:push!].(api, state, key)
-            Writer[:push!].(api, state, list[key])
-            api.lua_settable(state[:lua], stack_index + 1)
-          end
-        else
-          list.each_with_index do |value, index|
-            Writer[:push!].(api, state, index + 1)
-            Writer[:push!].(api, state, value)
-            api.lua_settable(state[:lua], stack_index + 1)
-          end
-        end
       },
 
-      read!: ->(api, state, stack_index) {
+      push!: Component::V54::Table[:push!],
+      read!: Component::V54::Table[:read!],
+
+      read_field_and_push!: ->(api, state, component, expected_key, stack_index) {
         stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
 
-        type = api.lua_typename(state[:lua],
-                                api.lua_type(state[:lua], stack_index)).read_string
-
-        api.lua_pushnil(state[:lua])
-
-        return nil if type != 'table'
-
-        tuples = []
-
-        while api.lua_next(state[:lua], stack_index).positive?
-          value = Reader[:read!].(api, state, stack_index + 2)
-          key = Reader[:read!].(api, state, stack_index + 1)
-          api.lua_settop(state[:lua], -2) if value[:pop]
-
-          tuples << [key[:value], value[:value]]
-
-          break if value[:type] == 'no value' || key[:value].instance_of?(Proc)
-        end
-
-        { value: Logic::Tables[:to_hash_or_array].(tuples), pop: true }
-      },
-
-      read_field_and_push!: ->(api, state, expected_key, stack_index) {
-        stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
-
-        type = api.lua_typename(state[:lua],
-                                api.lua_type(state[:lua], stack_index)).read_string
+        type = api.lua_typename(
+          state[:lua], api.lua_type(state[:lua], stack_index)
+        ).read_string
 
         api.lua_pushnil(state[:lua])
 
@@ -64,8 +27,8 @@ module Component
         result = nil
 
         while api.lua_next(state[:lua], stack_index).positive?
-          value = Reader[:read!].(api, state, stack_index + 2)
-          key = Reader[:read!].(api, state, stack_index + 1)
+          value = component::Reader[:read!].(api, state, component, stack_index + 2)
+          key = component::Reader[:read!].(api, state, component, stack_index + 1)
 
           api.lua_settop(state[:lua], -2) if value[:pop]
 
@@ -73,7 +36,7 @@ module Component
             state[:lua], api.lua_type(state[:lua], stack_index + 1)
           ).read_string
 
-          if Table[:is_same_key].(key_type, key[:value], expected_key)
+          if component::Table[:is_same_key].(key_type, key[:value], expected_key)
             result = value[:value]
             break
           end
@@ -83,7 +46,7 @@ module Component
 
         api.lua_settop(state[:lua], -2)
 
-        Writer[:push!].(api, state, result)
+        component::Writer[:push!].(api, state, component, result)
       },
 
       is_same_key: ->(lua_key_type, lua_key, ruby_key) {

@@ -87,10 +87,20 @@ module Controller
     },
 
     _check!: ->(result) {
+      ruby_error = result[:state] && result[:state][:ruby_error_info]
+
+      result[:state][:ruby_error_info] = nil if ruby_error
+
       if result[:error]
-        raise SweetMoon::Errors::SweetMoonErrorHelper.for(
-          result[:error][:status]
-        ), result[:error][:value]
+        if ruby_error
+          raise SweetMoon::Errors::SweetMoonErrorHelper.merge_traceback!(
+            ruby_error, result[:error][:value]
+          )
+        else
+          raise SweetMoon::Errors::SweetMoonErrorHelper.for(
+            result[:error][:status]
+          ), result[:error][:value]
+        end
       end
 
       result

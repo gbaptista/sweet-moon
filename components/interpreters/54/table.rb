@@ -6,31 +6,36 @@ require_relative 'reader'
 module Component
   module V54
     Table = {
-      push!: ->(api, state, list, stack_index = -1) {
+      create_table!: ->(api, state, list) {
+        api.lua_createtable(state[:lua], list.size, 0)
+      },
+
+      push!: ->(api, state, component, list, stack_index = -1) {
         stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
 
-        api.lua_createtable(state[:lua], list.size, 0)
+        component::Table[:create_table!].(api, state, list)
 
         if list.is_a? Hash
           list.each_key do |key|
-            Writer[:push!].(api, state, key)
-            Writer[:push!].(api, state, list[key])
+            component::Writer[:push!].(api, state, component, key)
+            component::Writer[:push!].(api, state, component, list[key])
             api.lua_settable(state[:lua], stack_index + 1)
           end
         else
           list.each_with_index do |value, index|
-            Writer[:push!].(api, state, index + 1)
-            Writer[:push!].(api, state, value)
+            component::Writer[:push!].(api, state, component, index + 1)
+            component::Writer[:push!].(api, state, component, value)
             api.lua_settable(state[:lua], stack_index + 1)
           end
         end
       },
 
-      read!: ->(api, state, stack_index) {
+      read!: ->(api, state, component, stack_index) {
         stack_index = api.lua_gettop(state[:lua]) if stack_index == -1
 
-        type = api.lua_typename(state[:lua],
-                                api.lua_type(state[:lua], stack_index)).read_string
+        type = api.lua_typename(
+          state[:lua], api.lua_type(state[:lua], stack_index)
+        ).read_string
 
         api.lua_pushnil(state[:lua])
 
@@ -39,8 +44,8 @@ module Component
         tuples = []
 
         while api.lua_next(state[:lua], stack_index).positive?
-          value = Reader[:read!].(api, state, stack_index + 2)
-          key = Reader[:read!].(api, state, stack_index + 1)
+          value = component::Reader[:read!].(api, state, component, stack_index + 2)
+          key = component::Reader[:read!].(api, state, component, stack_index + 1)
           api.lua_settop(state[:lua], -2) if value[:pop]
 
           tuples << [key[:value], value[:value]]
@@ -51,7 +56,7 @@ module Component
         { value: Logic::Tables[:to_hash_or_array].(tuples), pop: true }
       },
 
-      read_field!: ->(api, state, expected_key, stack_index) {
+      read_field!: ->(api, state, _component, expected_key, stack_index) {
         expected_key = expected_key.to_s if expected_key.is_a? Symbol
 
         api.lua_getfield(state[:lua], stack_index, expected_key)

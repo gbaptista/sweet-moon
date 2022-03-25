@@ -1,17 +1,19 @@
 require_relative '../../../logic/interpreters/interpreter_50'
 
+require_relative 'function'
 require_relative 'reader'
-require_relative 'writer'
 require_relative 'table'
+require_relative 'writer'
 
 module Component
   module V50
     Interpreter = {
       version: Logic::V50::Interpreter[:version],
+      logic: Logic::V50,
 
       create_state!: ->(api) {
         state = api.lua_open
-        { state: { lua: state, avoid_gc: [] },
+        { state: { lua: state, avoid_gc: [], ruby_error_info: nil },
           error: state ? nil : :MemoryAllocation }
       },
 
@@ -48,7 +50,7 @@ module Component
       },
 
       push_value!: ->(api, state, value) {
-        Writer[:push!].(api, state, value)
+        Writer[:push!].(api, state, Component::V50, value)
         { state: state }
       },
 
@@ -70,7 +72,10 @@ module Component
         api.lua_pushstring(state[:lua], variable.to_s)
         api.lua_gettable(state[:lua], Logic::V50::Interpreter[:LUA_GLOBALSINDEX])
 
-        Table[:read_field_and_push!].(api, state, key, -1) unless key.nil?
+        unless key.nil?
+          Table[:read_field_and_push!].(api, state, Component::V50, key,
+                                        -1)
+        end
 
         { state: state, extra_pop: extra_pop }
       },
@@ -81,7 +86,8 @@ module Component
       },
 
       read_and_pop!: ->(api, state, stack_index = -1, extra_pop: false) {
-        result = Component::V50::Reader[:read!].(api, state, stack_index)
+        result = Component::V50::Reader[:read!].(api, state, Component::V50,
+                                                 stack_index)
 
         api.lua_settop(state[:lua], -2) if result[:pop]
         api.lua_settop(state[:lua], -2) if extra_pop
@@ -90,7 +96,7 @@ module Component
       },
 
       read_all!: ->(api, state) {
-        result = Reader[:read_all!].(api, state)
+        result = Reader[:read_all!].(api, state, Component::V50)
 
         { state: state, output: result }
       },
