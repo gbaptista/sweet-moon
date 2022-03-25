@@ -1047,13 +1047,13 @@ state.load('source.lua')
 -- source.lua
 local status, err = pcall(rubyFn)
 
-print(status) ; => false
+print(status) -- => false
 
 print(err)
-; [string "    return function (...)..."]:5: RuntimeError: error from ruby stack traceback:
-;         [string "    return function (...)..."]:5: in function 'rubyFn'
-;         [C]: in function 'pcall'
-;         source.lua:2: in main chunk
+-- [string "    return function (...)..."]:5: RuntimeError: error from ruby stack traceback:
+--         [string "    return function (...)..."]:5: in function 'rubyFn'
+--         [C]: in function 'pcall'
+--         source.lua:2: in main chunk
 ```
 
 Ruby errors not handled inside Lua, can be rescued inside Ruby again, with an aditional Lua backtrace:
