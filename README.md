@@ -1103,7 +1103,7 @@ lua_fn = state.get(:luaFn)
 
 begin
   lua_fn.()
-rescue e => LuaRuntimeError
+rescue LuaRuntimeError => e
   puts e.message # => "source.lua:3: lua function error"
 end
 ```
