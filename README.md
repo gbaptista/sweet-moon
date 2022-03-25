@@ -1008,7 +1008,7 @@ rescue LuaRuntimeError => error
 end
 ```
 
-### Ruby vs Lua Errors
+### Ruby feat. Lua Errors
 
 Lua errors can be rescued inside Ruby:
 
