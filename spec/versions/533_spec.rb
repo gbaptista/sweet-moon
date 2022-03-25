@@ -147,4 +147,52 @@ RSpec.describe do
       expect(state.get(:_G, :gba)).to eq(3.0)
     end
   end
+
+  context 'errors' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state = SweetMoon::State.new(shared_object: config['5.3.3']['shared_object'])
+
+      state.set('a', -> { raise SystemStackError, 'noooope:aaaaa' })
+      state.set('b', -> { 1 })
+      state.set('c', -> { raise SystemStackError, 'noooope:ccccc' })
+      state.set('d', -> { 1 })
+
+      expect { state.load('spec/versions/examples/error.lua') }.to raise_error(
+        SystemStackError, /noooope:aaaaa/
+      )
+
+      begin
+        state.load('spec/versions/examples/error.lua')
+      rescue SystemStackError => e
+        expect(e.full_message).to match(/in function 'a'/)
+        expect(e.full_message).to match(%r{spec/versions/examples/error\.lua:3})
+      end
+
+      expect(state.add_package_path(config['fennel-dev'])).to eq(nil)
+
+      expect { state.fennel.load('spec/versions/examples/error.fnl') }.to raise_error(
+        SystemStackError, /noooope:aaaaa/
+      )
+
+      begin
+        state.fennel.load('spec/versions/examples/error.fnl')
+      rescue SystemStackError => e
+        expect(e.full_message).to match(/in function 'a'/)
+        expect(e.full_message).to match(%r{spec/versions/examples/error\.fnl:3})
+      end
+
+      expect { state.load('spec/versions/examples/error_b.lua') }.to raise_error(
+        SystemStackError, /noooope:ccccc/
+      )
+
+      begin
+        state.load('spec/versions/examples/error_b.lua')
+      rescue SystemStackError => e
+        expect(e.full_message).to match(/in function 'c'/)
+        expect(e.full_message).to match(%r{spec/versions/examples/error_b\.lua:7})
+      end
+    end
+  end
 end

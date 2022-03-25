@@ -4,8 +4,8 @@ require_relative 'table'
 module Component
   module V54
     Writer = {
-      push!: ->(api, state, value) {
-        case Writer[:_to_lua_type].(value)
+      push!: ->(api, state, component, value) {
+        case component::Writer[:_to_lua_type].(value)
         when 'string'
           api.lua_pushstring(state[:lua], value.to_s)
         when 'number'
@@ -21,9 +21,9 @@ module Component
         when 'boolean'
           api.lua_pushboolean(state[:lua], value ? 1 : 0)
         when 'table'
-          Table[:push!].(api, state, value)
+          component::Table[:push!].(api, state, component, value)
         when 'function'
-          Function[:push!].(api, state, value)
+          component::Function[:push!].(api, state, component, value)
         else
           api.lua_pushstring(
             state[:lua], "#<#{value.class}:0x#{format('%016x', value.object_id)}>"

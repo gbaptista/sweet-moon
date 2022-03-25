@@ -45,6 +45,20 @@ RSpec.describe do
     end
   end
 
+  context 'function' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state = SweetMoon::State.new(shared_object: config['5.0.3']['shared_object'])
+
+      sum_list = ->(list) { list.sum }
+
+      expect(state.set('sumList', sum_list)).to eq(nil)
+
+      expect(state.eval('return sumList({2, 3, 5})')).to eq(10.0)
+    end
+  end
+
   context 'state' do
     it do
       config = YAML.load_file('config/tests.yml')
@@ -145,6 +159,39 @@ RSpec.describe do
       expect(state.get(:my, :a)).to eq(2.0)
       expect(state.set(:_G, :gba, 3)).to eq(nil)
       expect(state.get(:_G, :gba)).to eq(3.0)
+    end
+  end
+
+  context 'errors' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state = SweetMoon::State.new(shared_object: config['5.0.3']['shared_object'])
+
+      state.set('a', -> { raise SystemStackError, 'noooope:aaaaa' })
+      state.set('b', -> { 1 })
+      state.set('c', -> { raise SystemStackError, 'noooope:ccccc' })
+      state.set('d', -> { 1 })
+
+      expect { state.load('spec/versions/examples/error.lua') }.to raise_error(
+        SystemStackError, /noooope:aaaaa/
+      )
+
+      begin
+        state.load('spec/versions/examples/error.lua')
+      rescue SystemStackError => e
+        expect(e.full_message).to match(/return function \(...\)/)
+      end
+
+      expect { state.load('spec/versions/examples/error_b.lua') }.to raise_error(
+        SystemStackError, /noooope:ccccc/
+      )
+
+      begin
+        state.load('spec/versions/examples/error_b.lua')
+      rescue SystemStackError => e
+        expect(e.full_message).to match(/return function \(...\)/)
+      end
     end
   end
 end

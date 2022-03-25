@@ -7,7 +7,7 @@ module DSL
     include DSL::Concerns::Packages
     include DSL::Concerns::Fennel
 
-    attr_reader :meta
+    attr_reader :meta, :api
 
     def initialize(api_component, interpreter_component, controller, options = {})
       @api = api_component[:api]
@@ -20,6 +20,10 @@ module DSL
 
       add_package_path(options[:package_path]) if options[:package_path]
       add_package_cpath(options[:package_cpath]) if options[:package_cpath]
+    end
+
+    def raw
+      @state
     end
 
     def eval(input, outputs = 1)

@@ -5,6 +5,9 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Lint/RescueException:
+  Exclude: ['components/interpreters/**/function.rb']
+
 Layout/LineLength:
   Max: 86
   Exclude: ['spec/**/*', 'logic/signatures/*']

@@ -1,23 +1,24 @@
 require_relative '../../../logic/interpreters/interpreter_51'
 
+require_relative 'function'
 require_relative 'reader'
-require_relative 'writer'
 require_relative 'table'
+require_relative 'writer'
 
 module Component
   module V51
     Interpreter = {
       version: Logic::V51::Interpreter[:version],
+      logic: Logic::V51,
 
       create_state!: ->(api) {
         state = api.luaL_newstate
-        { state: { lua: state, avoid_gc: [] },
+        { state: { lua: state, avoid_gc: [], ruby_error_info: nil },
           error: state ? nil : :MemoryAllocation }
       },
 
       open_standard_libraries!: ->(api, state) {
         api.luaL_openlibs(state[:lua])
-
         { state: state }
       },
 
@@ -41,7 +42,7 @@ module Component
       },
 
       push_value!: ->(api, state, value) {
-        Writer[:push!].(api, state, value)
+        Writer[:push!].(api, state, Component::V51, value)
         { state: state }
       },
 
@@ -59,7 +60,7 @@ module Component
         unless key.nil?
           if api.lua_typename(state[:lua],
                               api.lua_type(state[:lua], -1)).read_string == 'table'
-            Table[:read_field!].(api, state, key, -1)
+            Table[:read_field!].(api, state, Component::V51, key, -1)
           else
             api.lua_pushnil(state[:lua])
           end
@@ -74,7 +75,7 @@ module Component
       },
 
       read_and_pop!: ->(api, state, stack_index = -1, extra_pop: false) {
-        result = Component::V51::Reader[:read!].(api, state, stack_index)
+        result = Reader[:read!].(api, state, Component::V51, stack_index)
 
         api.lua_settop(state[:lua], -2) if result[:pop]
         api.lua_settop(state[:lua], -2) if extra_pop
@@ -83,7 +84,7 @@ module Component
       },
 
       read_all!: ->(api, state) {
-        result = Reader[:read_all!].(api, state)
+        result = Reader[:read_all!].(api, state, Component::V51)
 
         { state: state, output: result }
       },

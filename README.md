@@ -32,6 +32,7 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
   - [Integration with fnx](#integration-with-fnx)
 - [Global vs Isolated](#global-vs-isolated)
 - [Error Handling](#error-handling)
+  - [Ruby feat. Lua Errors](#ruby-feat-lua-errors)
 - [Where can I find .so files?](#where-can-i-find-so-files)
 - [Low-Level C API](#low-level-c-api)
   - [The API](#the-api)
@@ -1006,6 +1007,109 @@ rescue LuaRuntimeError => error
   # => [string "return 1 + true"]:1: attempt to perform arithmetic on a boolean value
 end
 ```
+
+### Ruby vs Lua Errors
+
+Lua errors can be rescued inside Ruby:
+
+```lua
+-- source.lua
+error('error from lua')
+```
+
+```ruby
+require 'sweet-moon'
+require 'sweet-moon/errors'
+
+state = SweetMoon::State.new
+
+begin
+  state.load('source.lua')
+rescue LuaRuntimeError => e
+  puts e.message
+  # => source.lua:2: error from lua
+end
+```
+
+Ruby errors can be handled inside Lua:
+
+```ruby
+require 'sweet-moon'
+
+state = SweetMoon::State.new
+
+state.set(:rubyFn, -> { raise 'error from ruby' })
+
+state.load('source.lua')
+```
+
+```lua
+-- source.lua
+local status, err = pcall(rubyFn)
+
+print(status) ; => false
+
+print(err)
+; [string "    return function (...)..."]:5: RuntimeError: error from ruby stack traceback:
+;         [string "    return function (...)..."]:5: in function 'rubyFn'
+;         [C]: in function 'pcall'
+;         source.lua:2: in main chunk
+```
+
+Ruby errors not handled inside Lua, can be rescued inside Ruby again, with an aditional Lua backtrace:
+
+```lua
+-- source.lua
+a = 1
+
+rubyFn()
+```
+
+```ruby
+require 'sweet-moon'
+require 'sweet-moon/errors'
+
+state = SweetMoon::State.new
+
+state.set(:rubyFn, -> { raise 'error from ruby' })
+
+begin
+  state.load('source.lua')
+rescue RuntimeError => e
+  puts e.message # => error from ruby
+
+  puts e.backtrace.last
+  # => source.lua:4: in main chunk
+end
+```
+
+Lua errors inside Lua functions can be rescued inside Ruby:
+
+```lua
+-- source.lua
+function luaFn()
+  error('lua function error')
+end
+```
+
+```ruby
+require 'sweet-moon'
+require 'sweet-moon/errors'
+
+state = SweetMoon::State.new
+
+state.load('source.lua')
+
+lua_fn = state.get(:luaFn)
+
+begin
+  lua_fn.()
+rescue e => LuaRuntimeError
+  puts e.message # => "source.lua:3: lua function error"
+end
+```
+
+For Fennel, all the examples above are equally true, with additional stack traceback as well.
 
 ## Where can I find .so files?
 

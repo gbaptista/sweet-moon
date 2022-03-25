@@ -6,7 +6,8 @@ module Component
           ffi: [:cfunction, [:pointer], :int],
           overwrite: {
             lua_pushcclosure: [%i[pointer cfunction int], :void],
-            lua_tocfunction: [%i[pointer int], :cfunction]
+            lua_tocfunction: [%i[pointer int], :cfunction],
+            lua_atpanic: [%i[pointer cfunction], :cfunction]
           }
         }
       ],
