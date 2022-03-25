@@ -1067,7 +1067,6 @@ rubyFn()
 
 ```ruby
 require 'sweet-moon'
-require 'sweet-moon/errors'
 
 state = SweetMoon::State.new
 
