@@ -1056,7 +1056,7 @@ print(err)
 --         source.lua:2: in main chunk
 ```
 
-Ruby errors not handled inside Lua, can be rescued inside Ruby again, with an aditional Lua backtrace:
+Ruby errors not handled inside Lua can be rescued inside Ruby again, with an additional Lua backtrace:
 
 ```lua
 -- source.lua
