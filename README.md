@@ -74,7 +74,7 @@ gem install sweet-moon
 > **Disclaimer:** It's an early-stage project, and you should expect breaking changes.
 
 ```ruby
-gem 'sweet-moon', '~> 0.0.5'
+gem 'sweet-moon', '~> 0.0.6'
 ```
 
 ```ruby
