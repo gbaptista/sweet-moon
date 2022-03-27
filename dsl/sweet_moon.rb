@@ -11,7 +11,7 @@ require_relative '../logic/interpreter'
 module SweetMoon
   module API
     def new(options = {})
-      Cache.instance.api(Logic::Options[:normalize].(options))
+      DSL::Cache.instance.api(Logic::Options[:normalize].(options))
     end
 
     module_function :new
@@ -21,9 +21,9 @@ module SweetMoon
     def new(options = {})
       options = Logic::Options[:normalize].(options)
 
-      api = Cache.instance.api_module(options)
+      api = DSL::Cache.instance.api_module(options)
 
-      interpreter = Cache.instance.interpreter_module(api, options)
+      interpreter = DSL::Cache.instance.interpreter_module(api, options)
 
       DSL::State.new(api, interpreter, Controller::State, options)
     end
@@ -46,7 +46,7 @@ module SweetMoon
   end
 
   def global
-    Global
+    DSL::Global
   end
 
   module_function :meta, :global

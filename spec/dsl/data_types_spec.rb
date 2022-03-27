@@ -20,25 +20,12 @@ RSpec.describe do
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
-      expect(fennel.keys.sort).to eq(
-        ['comment', 'comment?', 'compile', 'compile-stream', 'compile-string',
-         'compile1', 'compileStream', 'compileString', 'doc', 'dofile', 'eval',
-         'gensym', 'granulate', 'list', 'list?', 'load-code', 'loadCode',
-         'macro-loaded', 'macro-path', 'macro-searchers', 'macroLoaded',
-         'make-searcher', 'makeSearcher', 'make_searcher', 'mangle', 'metadata',
-         'parser', 'path', 'repl', 'scope', 'search-module', 'searchModule',
-         'searcher', 'sequence', 'sequence?', 'string-stream', 'stringStream',
-         'sym', 'sym-char?', 'sym?', 'syntax', 'traceback', 'unmangle', 'varg',
-         'version', 'view']
-      )
+      expect(fennel.keys).to include(*%w[dofile eval repl version view])
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
-      expect(fennel.values.map(&:class).map(&:to_s).sort).to eq(
-        %w[Array Hash Hash Hash Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc
-           Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc
-           Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc String
-           String String]
+      expect(fennel.values.map(&:class).map(&:to_s)).to include(
+        *%w[Array Hash Proc String String String]
       )
 
       expect(state.eval('return 1 + 1')).to eq(2)
@@ -59,32 +46,15 @@ RSpec.describe do
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
-      expect(supernova.keys.sort).to eq(
-        %w[active_theme apply_command chain colors disable enable enabled get-theme
-           get_theme handlers init is_controller set-colors set-theme set_colors
-           set_theme styles]
-      )
+      expect(supernova.keys).to include(*%w[enable set-colors set-theme])
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
-      expect(supernova.values.map(&:class).map(&:to_s).sort).to eq(
-        %w[Hash Hash Hash Proc Proc Proc Proc Proc Proc Proc Proc Proc Proc String
-           String TrueClass TrueClass]
+      expect(supernova.values.map(&:class).map(&:to_s)).to include(
+        *%w[Hash Proc String TrueClass]
       )
 
       expect(state.eval('return 1 + 1')).to eq(2)
-    end
-  end
-
-  context 'lfs', skip: true do
-    it do
-      config = YAML.load_file('config/tests.yml')
-
-      state = SweetMoon::State.new(shared_object: config['5.4.2']['shared_object'])
-
-      config['luarocks']['path'].each { |path| state.add_package_path(path) }
-
-      state.eval('lfs = require("lfs")')
     end
   end
 
@@ -102,15 +72,11 @@ RSpec.describe do
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
-      expect(dkjson.keys.sort).to eq(
-        %w[addnewline decode encode encodeexception null quotestring use_lpeg version]
-      )
+      expect(dkjson.keys).to include(*%w[decode encode])
 
       expect(state.eval('return 1 + 1')).to eq(2)
 
-      expect(dkjson.values.map(&:class).map(&:to_s).sort).to eq(
-        %w[Hash Proc Proc Proc Proc Proc Proc String]
-      )
+      expect(dkjson.values.map(&:class).map(&:to_s)).to include(*%w[Hash Proc String])
 
       expect(state.eval('return 1 + 1')).to eq(2)
     end

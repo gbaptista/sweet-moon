@@ -1,3 +1,5 @@
+require_relative '../components/default'
+
 module DSL
   class Api
     attr_reader :functions, :meta
@@ -7,11 +9,29 @@ module DSL
 
       @functions = @component[:signatures].keys
 
-      @meta = Struct.new(
-        *@component[:meta][:elected].keys
-      ).new(*@component[:meta][:elected].values)
+      build_meta
 
       extend @component[:api]
+    end
+
+    def build_global_ffi
+      global_ffi = Component::Default.instance.options[:global_ffi]
+
+      unless @component[:meta][:options][:global_ffi].nil?
+        global_ffi = @component[:meta][:options][:global_ffi]
+      end
+
+      global_ffi
+    end
+
+    def build_meta
+      meta_data = @component[:meta][:elected].clone
+
+      meta_data[:global_ffi] = build_global_ffi
+
+      @meta = Struct.new(
+        *meta_data.keys
+      ).new(*meta_data.values)
     end
 
     def signature_for(function)

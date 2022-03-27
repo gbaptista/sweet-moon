@@ -25,7 +25,8 @@ RSpec.describe do
 
       expect(state.meta.to_h).to eq(
         api_reference: '5.4.2', interpreter: '5.4', runtime: 'Lua 5.4',
-        shared_objects: [config['5.4.4']['shared_object']]
+        shared_objects: [config['5.4.4']['shared_object']],
+        global_ffi: false
       )
 
       expect(state.meta.api_reference).to eq('5.4.2')
@@ -39,7 +40,8 @@ RSpec.describe do
 
       expect(state_b.meta.to_h).to eq(
         api_reference: '5.4.2', interpreter: '5.4', runtime: 'Lua 5.4',
-        shared_objects: [config['5.4.2']['shared_object']]
+        shared_objects: [config['5.4.2']['shared_object']],
+        global_ffi: false
       )
 
       expect(state.eval('return 1.5 + 1.5;')).to eq(3.0)
@@ -59,13 +61,15 @@ RSpec.describe do
       expect(api.signature_for(:luaH_new)).to eq(nil)
 
       expect(api.meta.to_h).to eq(
-        api_reference: '5.4.2', shared_objects: [config['5.4.4']['shared_object']]
+        api_reference: '5.4.2', shared_objects: [config['5.4.4']['shared_object']],
+        global_ffi: false
       )
 
       api_b = SweetMoon::API.new(shared_object: config['3.2.2']['shared_object'])
 
       expect(api_b.meta.to_h).to eq(
-        api_reference: '3.2.2', shared_objects: [config['3.2.2']['shared_object']]
+        api_reference: '3.2.2', shared_objects: [config['3.2.2']['shared_object']],
+        global_ffi: false
       )
 
       expect(api_b.functions.size).to be > 150
@@ -89,7 +93,8 @@ RSpec.describe do
       expect(SweetMoon.global.cached).to eq(%i[global_api_module global_api])
 
       expect(SweetMoon.global.api.meta.to_h).to eq(
-        api_reference: '5.4.2', shared_objects: [config['5.4.4']['shared_object']]
+        api_reference: '5.4.2', shared_objects: [config['5.4.4']['shared_object']],
+        global_ffi: false
       )
 
       expect(SweetMoon.global.api.functions.size).to be > 150
@@ -100,7 +105,8 @@ RSpec.describe do
       SweetMoon.global.config(shared_object: config['3.2.2']['shared_object'])
 
       expect(SweetMoon.global.api.meta.to_h).to eq(
-        api_reference: '3.2.2', shared_objects: [config['3.2.2']['shared_object']]
+        api_reference: '3.2.2', shared_objects: [config['3.2.2']['shared_object']],
+        global_ffi: false
       )
 
       expect(SweetMoon.global.api.functions.size).to be > 150
