@@ -30,7 +30,9 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
   - [Fennel Global vs Local Variables](#fennel-global-vs-local-variables)
   - [Fennel Setup](#fennel-setup)
   - [Integration with fnx](#integration-with-fnx)
+  - [Fennel REPL](#fennel-repl)
 - [Global vs Isolated](#global-vs-isolated)
+- [Global FFI](#global-ffi)
 - [Error Handling](#error-handling)
   - [Ruby feat. Lua Errors](#ruby-feat-lua-errors)
 - [Where can I find .so files?](#where-can-i-find-so-files)
@@ -889,6 +891,39 @@ To enforce the path for the `.fnx.fnl` file:
 fennel.eval('(let [fnx (require :fnx)] (fnx.bootstrap! "/project/.fnx.fnl"))')
 ```
 
+### Fennel REPL
+
+In Ruby, you can start a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) at any time somewhere in your code with [_pry_](https://github.com/pry/pry):
+
+```ruby
+require 'pry'
+
+binding.pry
+```
+
+The same is true for Fennel, you just need to:
+```fnl
+(let [fennel (require :fennel)]
+  (fennel.repl))
+```
+
+Fennel's REPL won't have your _local_ values. But, you can tweak it to receive values to be checked inside the REPL:
+
+```fnl
+(fn my-repl [to-expose]
+  (let [fennel (require :fennel) env _G]
+    (each [key value (pairs to-expose)] (tset env key value))
+    (fennel.repl {:env env})))
+
+(local value "some value")
+
+(my-repl {:value value})
+
+; Inside the REPL:
+
+; >> value
+; "some value"
+```
 ## Global vs Isolated
 
 You can use the **global** helper that provides an _API_ and a _State_ for quick-and-dirty coding. It uses internally a Ruby [_Singleton_](https://docs.ruby-lang.org/en/3.1/Singleton.html):
@@ -964,6 +999,46 @@ state_5.eval('return _VERSION') # => Lua 5.4
 state_3.eval('return _VERSION') # => Lua 3.2
 ```
 
+## Global FFI
+
+Some Lua libraries (e.g., [_readline_](https://pjb.com.au/comp/lua/readline.html) and [_luafilesystem_](https://keplerproject.github.io/luafilesystem/)) require the Lua C API functions available in the global C environment.
+
+By default, _Sweet Moon_ enables [_Global FFI_](https://github.com/ffi/ffi/wiki/Loading-Libraries#function-visibility) to reduce friction when using popular libraries.
+
+Using distinct Lua versions simultaneously with multiple _Shared Objects_ may be dangerous in this setup: Two APIs with the same name functions could be an issue because something will be overwritten.
+
+Also, libraries that need Lua C API functions are compiled for a specific Lua version. If you are, e.g., using _LuaJIT_ and your library expects the _Standard Lua_, you may face issues.
+
+You can disable _Global FFI_ at any time with:
+
+```ruby
+require 'sweet-moon'
+
+SweetMoon.global.config(global_ffi: false)
+
+SweetMoon::State.new(global_ffi: false)
+
+SweetMoon::API.new(global_ffi: false)
+```
+
+To check if it's enabled or not:
+
+```ruby
+require 'sweet-moon'
+
+SweetMoon.global.api.meta.global_ffi # => true
+SweetMoon.global.state.meta.global_ffi # => true
+
+SweetMoon::API.new.meta.global_ffi # => true
+
+SweetMoon::State.new.meta.global_ffi # => true
+```
+
+**Caveats:**
+
+Binding a C API globally it's irreversible, so if you start something with `global_ffi: true` and then change to `global_ffi: false`, it won't make the global one go away. If you need _local_, ensure that you do it from the first line and never put anything as global throughout the entire program life cycle.
+
+Also, the simple action of accessing `meta.global_ff` will bind the API, so you need to set your desired configuration before checking.
 
 ## Error Handling
 
