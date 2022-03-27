@@ -4,16 +4,14 @@ module Component
   class Default
     include Singleton
 
-    def initialize
-      @config = { global_ffi: true }
-    end
+    attr_reader :options
 
-    def options
-      @config
+    def initialize
+      @options = { global_ffi: true }
     end
 
     def set(key, value)
-      @config[key.to_sym] = value
+      @options[key.to_sym] = value
     end
   end
 end
