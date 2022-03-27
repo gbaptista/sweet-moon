@@ -904,7 +904,7 @@ binding.pry
 The same is true for Fennel, you just need to:
 ```fnl
 (let [fennel (require :fennel)]
-  (fennel.repl))
+  (fennel.repl {}))
 ```
 
 Fennel's REPL won't have your _local_ values. But, you can tweak it to receive values to be checked inside the REPL:
