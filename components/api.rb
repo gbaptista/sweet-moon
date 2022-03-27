@@ -2,7 +2,7 @@ require 'ffi'
 
 module Component
   API = {
-    open!: ->(shared_objects) {
+    open!: ->(shared_objects, options = {}, default = {}) {
       api = Module.new
 
       api.extend FFI::Library
@@ -10,8 +10,11 @@ module Component
       # TODO: Lua Constants
       # attach_variable
 
-      if shared_objects.size > 1
-        # TODO: Dangerous
+      global_ffi = default[:global_ffi]
+
+      global_ffi = options[:global_ffi] unless options[:global_ffi].nil?
+
+      if global_ffi
         api.ffi_lib_flags(:global, :now)
       else
         api.ffi_lib_flags(:local, :now)

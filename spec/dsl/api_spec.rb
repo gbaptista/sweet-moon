@@ -13,7 +13,8 @@ RSpec.describe do
       api = DSL::Api.new(component)
 
       expect(api.meta.to_h).to eq(
-        shared_objects: [config['shared_object']], api_reference: '5.4.2'
+        shared_objects: [config['shared_object']], api_reference: '5.4.2',
+        global_ffi: false
       )
 
       expect(api.functions.size).to be > 150
@@ -38,7 +39,8 @@ RSpec.describe do
       api = DSL::Api.new(component)
 
       expect(api.meta.to_h).to eq(
-        shared_objects: [config['shared_object']], api_reference: '3.2.2'
+        shared_objects: [config['shared_object']], api_reference: '3.2.2',
+        global_ffi: false
       )
 
       expect(api.functions.size).to be > 150

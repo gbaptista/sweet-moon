@@ -12,7 +12,8 @@ RSpec.describe do
 
     expect(api.meta.to_h).to eq(
       shared_objects: [config['5.4.4']['shared_object']],
-      api_reference: '5.4.2'
+      api_reference: '5.4.2',
+      global_ffi: false
     )
 
     expect(api.meta.shared_objects).to eq([config['5.4.4']['shared_object']])
@@ -24,7 +25,8 @@ RSpec.describe do
       shared_objects: [config['5.4.4']['shared_object']],
       api_reference: '5.4.2',
       interpreter: '5.4',
-      runtime: 'Lua 5.4'
+      runtime: 'Lua 5.4',
+      global_ffi: false
     )
 
     expect(state.meta.shared_objects).to eq([config['5.4.4']['shared_object']])
@@ -34,7 +36,8 @@ RSpec.describe do
 
     expect(SweetMoon.global.api.meta.to_h).to eq(
       shared_objects: [config['5.4.4']['shared_object']],
-      api_reference: '5.4.2'
+      api_reference: '5.4.2',
+      global_ffi: false
     )
 
     expect(SweetMoon.global.api.meta.shared_objects).to eq(
@@ -47,7 +50,8 @@ RSpec.describe do
       shared_objects: [config['5.4.4']['shared_object']],
       api_reference: '5.4.2',
       interpreter: '5.4',
-      runtime: 'Lua 5.4'
+      runtime: 'Lua 5.4',
+      global_ffi: false
     )
 
     expect(SweetMoon.global.state.meta.shared_objects).to eq(

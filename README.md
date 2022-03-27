@@ -1364,6 +1364,8 @@ Update the [`config/tests.yml`](https://github.com/gbaptista/sweet-moon/blob/mai
 
 Alternatively: Find or build the _Shared Objects_ for your Operating System on your own.
 
+Install the expected luarocks described in `config/tests.yml`.
+
 ### Running
 
 ```sh

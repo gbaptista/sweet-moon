@@ -96,16 +96,16 @@ module Component
       }
     }
 
-    LUA_HANDLER = <<LUA
-    return function (...)
-      result = _ruby(...)
+    LUA_HANDLER = <<~LUA
+      return function (...)
+        result = _ruby(...)
 
-      if result['error'] then
-        error(result['output'] .. ' ' .. debug.traceback())
-      else
-        return result['output']
+        if result['error'] then
+          error(result['output'] .. ' ' .. debug.traceback())
+        else
+          return result['output']
+        end
       end
-    end
-LUA
+    LUA
   end
 end

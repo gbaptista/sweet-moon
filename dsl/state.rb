@@ -1,6 +1,7 @@
 require_relative 'errors'
 require_relative 'concerns/packages'
 require_relative 'concerns/fennel'
+require_relative '../components/default'
 
 module DSL
   class State
@@ -87,13 +88,25 @@ module DSL
 
     private
 
-    def build_meta(api_component, interpreter_component)
-      meta_data = {
+    def build_api_meta(api_component)
+      global_ffi = Component::Default.instance.options[:global_ffi]
+
+      unless api_component[:meta][:options][:global_ffi].nil?
+        global_ffi = api_component[:meta][:options][:global_ffi]
+      end
+
+      {
         api_reference: api_component[:meta][:elected][:api_reference],
         shared_objects: api_component[:meta][:elected][:shared_objects],
-        interpreter: interpreter_component[:meta][:elected][:interpreter],
-        runtime: interpreter_component[:meta][:runtime][:lua]
+        global_ffi: global_ffi
       }
+    end
+
+    def build_meta(api_component, interpreter_component)
+      meta_data = build_api_meta(api_component)
+
+      meta_data[:interpreter] = interpreter_component[:meta][:elected][:interpreter]
+      meta_data[:runtime] = interpreter_component[:meta][:runtime][:lua]
 
       @meta = Struct.new(*meta_data.keys).new(*meta_data.values)
     end

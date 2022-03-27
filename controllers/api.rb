@@ -1,5 +1,6 @@
 require_relative '../components/injections'
 require_relative '../components/api'
+require_relative '../components/default'
 require_relative '../components/io'
 require_relative '../dsl/errors'
 
@@ -11,7 +12,9 @@ module Controller
     handle!: ->(options) {
       shared_objects = API[:elect_shared_objects!].(options[:shared_objects])
 
-      api = Component::API[:open!].(shared_objects)
+      api = Component::API[:open!].(
+        shared_objects, options, Component::Default.instance.options
+      )
 
       api_reference = API[:elect_api_reference!].(
         api.ffi_libraries, options[:api_reference]

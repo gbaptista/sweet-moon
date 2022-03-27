@@ -70,7 +70,8 @@ RSpec.describe do
         api_reference: '5.0.3',
         interpreter: '5.0',
         runtime: 'Lua 5.0.3',
-        shared_objects: [config['5.0.3']['shared_object']]
+        shared_objects: [config['5.0.3']['shared_object']],
+        global_ffi: false
       )
 
       expect(state.eval('return _VERSION')).to eq('Lua 5.0.3')

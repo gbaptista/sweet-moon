@@ -49,7 +49,8 @@ RSpec.describe do
         api_reference: '5.1.4',
         interpreter: '5.1',
         runtime: 'LuaJIT 2.0.5 (Lua 5.1)',
-        shared_objects: [config['jit:2.0.5']['shared_object']]
+        shared_objects: [config['jit:2.0.5']['shared_object']],
+        global_ffi: false
       )
       expect(state.eval('return _VERSION')).to eq('Lua 5.1')
       expect(state.eval('return jit.version')).to eq('LuaJIT 2.0.5')

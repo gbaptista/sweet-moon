@@ -4,16 +4,16 @@ module Component
   module V50
     Function = Component::V54::Function
 
-    LUA_HANDLER = <<LUA
-    return function (...)
-      result = _ruby(unpack(arg))
+    LUA_HANDLER = <<~LUA
+      return function (...)
+        result = _ruby(unpack(arg))
 
-      if result['error'] then
-        error(result['output'])
-      else
-        return result['output']
+        if result['error'] then
+          error(result['output'])
+        else
+          return result['output']
+        end
       end
-    end
-LUA
+    LUA
   end
 end

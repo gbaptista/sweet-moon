@@ -18,7 +18,8 @@ RSpec.describe do
         shared_objects: [config['5.4.2']['shared_object']],
         api_reference: '5.4.2',
         interpreter: '5.4',
-        runtime: 'Fennel 1.0.0 on Lua 5.4'
+        runtime: 'Fennel 1.0.0 on Lua 5.4',
+        global_ffi: false
       )
 
       expect(fennel.eval('(+ 1 1)')).to eq(2)
@@ -33,7 +34,8 @@ RSpec.describe do
         api_reference: '5.4.2',
         interpreter: '5.4',
         runtime: 'Fennel 1.0.0 on Lua 5.4',
-        shared_objects: [config['5.4.2']['shared_object']]
+        shared_objects: [config['5.4.2']['shared_object']],
+        global_ffi: false
       )
 
       expect(fennel.meta.api_reference).to eq('5.4.2')
@@ -62,7 +64,8 @@ RSpec.describe do
         shared_objects: [config['5.4.2']['shared_object']],
         api_reference: '5.4.2',
         interpreter: '5.4',
-        runtime: 'Fennel 1.0.0 on Lua 5.4'
+        runtime: 'Fennel 1.0.0 on Lua 5.4',
+        global_ffi: false
       )
 
       expect(fennel.eval('(+ 1 1)')).to eq(2)
@@ -77,7 +80,8 @@ RSpec.describe do
         api_reference: '5.4.2',
         interpreter: '5.4',
         runtime: 'Fennel 1.0.0 on Lua 5.4',
-        shared_objects: [config['5.4.2']['shared_object']]
+        shared_objects: [config['5.4.2']['shared_object']],
+        global_ffi: false
       )
 
       expect(fennel.meta.api_reference).to eq('5.4.2')
