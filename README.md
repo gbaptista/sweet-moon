@@ -924,6 +924,11 @@ Fennel's REPL won't have your _local_ values. But, you can tweak it to receive v
 ; >> value
 ; "some value"
 ```
+
+You can install [_readline_](https://luarocks.org/modules/peterbillam/readline) for a better experience, e.g., autocompleting.
+
+> _Check [Fennel's documentation](https://fennel-lang.org/api#start-a-configurable-repl) to learn more about the REPL._
+
 ## Global vs Isolated
 
 You can use the **global** helper that provides an _API_ and a _State_ for quick-and-dirty coding. It uses internally a Ruby [_Singleton_](https://docs.ruby-lang.org/en/3.1/Singleton.html):
@@ -970,6 +975,8 @@ api_5.luaL_newstate
 api_3.luaH_new
 ```
 
+> _Check the caveats related to [_Global FFI_](#global-ffi) when working with multiple versions._
+
 On the other hand, using the **global** _State_ may lead to a lot of issues. You need to consider from simple things – _"If I load two different files, the first file may impact the state of the second one?"_ – to more complex ones like multithreading, concurrency, etc.
 
 So, you can at any time create a new isolated _State_ and destroy it when you don't need it anymore:
@@ -998,6 +1005,8 @@ state_3 = SweetMoon::State.new(shared_object: '/usr/lib/liblua3.so')
 state_5.eval('return _VERSION') # => Lua 5.4
 state_3.eval('return _VERSION') # => Lua 3.2
 ```
+
+> _Check the caveats related to [_Global FFI_](#global-ffi) when working with multiple versions._
 
 ## Global FFI
 
