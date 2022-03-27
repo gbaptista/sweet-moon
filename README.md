@@ -1045,7 +1045,7 @@ SweetMoon::State.new.meta.global_ffi # => true
 
 **Caveats:**
 
-Binding a C API globally it's irreversible, so if you start something with `global_ffi: true` and then change to `global_ffi: false`, it won't make the global one go away. If you need _local_, ensure that you do it from the first line and never put anything as global throughout the entire program life cycle.
+Binding globally a C API is irreversible, so if you start something with `global_ffi: true` and then change to `global_ffi: false`, it won't make the global one disappear. If you need _local_, ensure that you do it from the first line and never put anything as global throughout the entire program life cycle.
 
 Also, the simple action of accessing `meta.global_ff` will bind the API, so you need to set your desired configuration before checking.
 
