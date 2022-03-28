@@ -20,12 +20,33 @@ module DSL
       build_meta
     end
 
-    def eval(input, outputs = 1)
-      @eval.([input], outputs)
+    def build_options(first, second)
+      options = { outputs: 1 }
+
+      options = options.merge(first) if first.is_a? Hash
+      options = options.merge(second) if second.is_a? Hash
+
+      options[:outputs] = first if first.is_a? Numeric
+      options[:outputs] = second if second.is_a? Numeric
+
+      if options[:outputs]
+        outputs = options[:outputs]
+        options.delete(:outputs)
+      end
+
+      { options: options, outputs: outputs }
     end
 
-    def load(path, outputs = 1)
-      @dofile.([path], outputs)
+    def eval(input, first = nil, second = nil)
+      options = build_options(first, second)
+
+      @eval.([input, options[:options]], options[:outputs])
+    end
+
+    def load(path, first = nil, second = nil)
+      options = build_options(first, second)
+
+      @dofile.([path, options[:options]], options[:outputs])
     end
 
     def build_meta
