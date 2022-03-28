@@ -446,6 +446,16 @@ second = state.get(:second)
 second.([%w[a b c]]) # => 'b'
 ```
 
+Alternatively, you can send the `outputs` parameter:
+
+```ruby
+require 'sweet-moon'
+
+state = SweetMoon::State.new
+
+state.eval('return "a", "b"', { outputs: 2 }) # => ['a', 'b']
+```
+
 You can call Ruby _Lambdas_ from _Lua_ as well:
 
 ```ruby

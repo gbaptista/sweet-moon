@@ -38,6 +38,13 @@ RSpec.describe do
       expect(fennel.eval('(values "a" "b")', { outputs: 2 })).to eq(%w[a b])
 
       expect(fennel.eval('(values "a" "b")', { outputs: 1 })).to eq('a')
+
+      expect(fennel.load('spec/dsl/examples/values.fnl')).to eq('a')
+      expect(fennel.load('spec/dsl/examples/values.fnl', 2)).to eq(%w[a b])
+
+      expect(
+        fennel.load('spec/dsl/examples/values.fnl', { outputs: 2 })
+      ).to eq(%w[a b])
     end
   end
 

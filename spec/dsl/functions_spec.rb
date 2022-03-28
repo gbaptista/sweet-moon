@@ -3,6 +3,38 @@ require 'yaml'
 require './dsl/sweet_moon'
 
 RSpec.describe do
+  context 'multi values' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      state = SweetMoon::State.new(
+        shared_object: config['5.4.4']['shared_object']
+      )
+
+      expect(state.meta.to_h).to eq(
+        shared_objects: [config['5.4.4']['shared_object']],
+        api_reference: '5.4.2',
+        interpreter: '5.4',
+        runtime: 'Lua 5.4',
+        global_ffi: false
+      )
+
+      expect(state.eval('return "a", "b"', 2)).to eq(%w[a b])
+      expect(state.eval('return "a", "b"', 1)).to eq('a')
+
+      expect(state.eval('return "a", "b"', { outputs: 2 })).to eq(%w[a b])
+
+      expect(state.eval('return "a", "b"', { outputs: 1 })).to eq('a')
+
+      expect(state.load('spec/dsl/examples/values.lua')).to eq('a')
+      expect(state.load('spec/dsl/examples/values.lua', 2)).to eq(%w[a b])
+
+      expect(
+        state.load('spec/dsl/examples/values.lua', { outputs: 2 })
+      ).to eq(%w[a b])
+    end
+  end
+
   context 'lambdas' do
     it do
       config = YAML.load_file('config/tests.yml')

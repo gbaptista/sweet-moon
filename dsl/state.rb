@@ -28,11 +28,19 @@ module DSL
     end
 
     def eval(input, outputs = 1)
-      @controller[:eval!].(@api, @interpreter, state, input, outputs)[:output]
+      options = _build_options(outputs, nil)
+
+      @controller[:eval!].(
+        @api, @interpreter, state, input, options[:outputs]
+      )[:output]
     end
 
     def load(path, outputs = 1)
-      @controller[:load!].(@api, @interpreter, state, path, outputs)[:output]
+      options = _build_options(outputs, nil)
+
+      @controller[:load!].(
+        @api, @interpreter, state, path, options[:outputs]
+      )[:output]
     end
 
     def get(variable, key = nil)
@@ -54,6 +62,23 @@ module DSL
       @controller[:destroy!].(@api, @interpreter, state) if @state
       @state = @controller[:create!].(@api, @interpreter)[:state]
       nil
+    end
+
+    def _build_options(first, second)
+      options = { outputs: 1 }
+
+      options = options.merge(first) if first.is_a? Hash
+      options = options.merge(second) if second.is_a? Hash
+
+      options[:outputs] = first if first.is_a? Numeric
+      options[:outputs] = second if second.is_a? Numeric
+
+      if options[:outputs]
+        outputs = options[:outputs]
+        options.delete(:outputs)
+      end
+
+      { options: options, outputs: outputs }
     end
 
     def _ensure_min_version!(purpose, lua, jit = nil)
