@@ -827,7 +827,11 @@ fennel.eval('_G.var-b') # => 35
 As Lua, Fennel functions may return [multiple results](https://www.lua.org/pil/5.1.html), so `eval` and `load` accept a second parameter to indicate the expected number of outputs:
 
 ```fnl
+; source.fnl
+
 (fn multi [] (values "c" "d"))
+
+(multi)
 ```
 
 ```ruby
@@ -836,7 +840,7 @@ require 'sweet-moon'
 fennel = SweetMoon::State.new.fennel
 
 fennel.eval('(values "a" "b")', 2) # => ['a', 'b']
-fennel.eval('(multi)', 2) # => ['c', 'd']
+fennel.load('source.fnl', 2) # => ['c', 'd']
 ```
 
 The Fennel API offers [some options](https://fennel-lang.org/api) that `eval` and `load` accept as a third parameter:
