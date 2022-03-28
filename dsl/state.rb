@@ -73,10 +73,9 @@ module DSL
       options[:outputs] = first if first.is_a? Numeric
       options[:outputs] = second if second.is_a? Numeric
 
-      if options[:outputs]
-        outputs = options[:outputs]
-        options.delete(:outputs)
-      end
+      outputs = options[:outputs] if options[:outputs]
+
+      options.delete(:outputs)
 
       { options: options, outputs: outputs }
     end
@@ -138,8 +137,7 @@ module DSL
 
     def state
       unless @state
-        raise SweetMoon::Errors::SweetMoonError,
-              'The state no longer exists.'
+        raise SweetMoon::Errors::SweetMoonError, 'The state no longer exists.'
       end
 
       @state
