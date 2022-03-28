@@ -1,6 +1,6 @@
 # Available at https://github.com/gbaptista/sweet-moon-test
 
-fennel-dev: '/home/me/sweet-moon-test/fennel/dev/?.lua'
+fennel-dev: '/home/gbaptista/Fennel/?.lua'
 
 luarocks:
   expected: ['dkjson', 'supernova', 'readline']

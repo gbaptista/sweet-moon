@@ -28,6 +28,7 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
 - [Fennel](#fennel)
   - [Fennel Usage](#fennel-usage)
   - [Fennel Global vs Local Variables](#fennel-global-vs-local-variables)
+  - [allowedGlobals and options](#allowedglobals-and-options)
   - [Fennel Setup](#fennel-setup)
   - [Integration with fnx](#integration-with-fnx)
   - [Fennel REPL](#fennel-repl)
@@ -445,6 +446,16 @@ second = state.get(:second)
 second.([%w[a b c]]) # => 'b'
 ```
 
+Alternatively, you can send the `outputs` parameter:
+
+```ruby
+require 'sweet-moon'
+
+state = SweetMoon::State.new
+
+state.eval('return "a", "b"', { outputs: 2 }) # => ['a', 'b']
+```
+
 You can call Ruby _Lambdas_ from _Lua_ as well:
 
 ```ruby
@@ -819,6 +830,71 @@ fennel.set('var-b', 35) # => nil
 fennel.eval('var-b') # => nil
 
 fennel.eval('_G.var-b') # => 35
+```
+
+### allowedGlobals and options
+
+As Lua, Fennel functions may return [multiple results](https://www.lua.org/pil/5.1.html), so `eval` and `load` accept a second parameter to indicate the expected number of outputs:
+
+```fnl
+; source.fnl
+
+(fn multi [] (values "c" "d"))
+
+(multi)
+```
+
+```ruby
+require 'sweet-moon'
+
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval('(values "a" "b")', 2) # => ['a', 'b']
+fennel.load('source.fnl', 2) # => ['c', 'd']
+```
+
+The Fennel API offers [some options](https://fennel-lang.org/api) that `eval` and `load` accept as a third parameter:
+
+```ruby
+require 'sweet-moon'
+
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval('(print (+ 2 3))', 1, { allowedGlobals: ['print'] }) # => 5
+
+fennel.eval('(print (+ 2 3))', 1, { allowedGlobals: [] })
+# Compile error in unknown:1 (SweetMoon::Errors::LuaRuntimeError)
+#   unknown identifier in strict mode: print
+
+# (print (+ 2 3))
+#  ^^^^^
+# * Try looking to see if there's a typo.
+# * Try using the _G table instead, eg. _G.print if you really want a global.
+# * Try moving this code to somewhere that print is in scope.
+# * Try binding print as a local in the scope of this code.
+```
+
+Alternatively, you can use the second parameter for options as well:
+
+```ruby
+require 'sweet-moon'
+
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval('(print (+ 2 3))', { allowedGlobals: ['print'] }) # => 5
+```
+
+You can also specify the expected outputs in the options parameter (it will be removed and not forwarded to Fennel):
+
+```ruby
+require 'sweet-moon'
+
+fennel = SweetMoon::State.new.fennel
+
+fennel.eval(
+  '(values "a" "b")',
+  { allowedGlobals: ['values'], outputs: 2 }
+) # => ['a', 'b']
 ```
 
 ### Fennel Setup

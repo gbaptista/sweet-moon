@@ -20,12 +20,16 @@ module DSL
       build_meta
     end
 
-    def eval(input, outputs = 1)
-      @eval.([input], outputs)
+    def eval(input, first = nil, second = nil)
+      options = _build_options(first, second)
+
+      @eval.([input, options[:options]], options[:outputs])
     end
 
-    def load(path, outputs = 1)
-      @dofile.([path], outputs)
+    def load(path, first = nil, second = nil)
+      options = _build_options(first, second)
+
+      @dofile.([path, options[:options]], options[:outputs])
     end
 
     def build_meta

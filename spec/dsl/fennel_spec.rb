@@ -3,6 +3,51 @@ require 'yaml'
 require './dsl/sweet_moon'
 
 RSpec.describe do
+  context 'Fennel options' do
+    it do
+      config = YAML.load_file('config/tests.yml')
+
+      fennel = SweetMoon::State.new(
+        shared_object: config['5.4.4']['shared_object'],
+        package_path: config['fennel-dev']
+      ).fennel
+
+      expect(fennel.meta.to_h).to eq(
+        shared_objects: [config['5.4.4']['shared_object']],
+        api_reference: '5.4.2',
+        interpreter: '5.4',
+        runtime: 'Fennel 1.0.1-dev on Lua 5.4',
+        global_ffi: false
+      )
+
+      expect(fennel.eval('print').class).to eq(Proc)
+
+      expect { fennel.eval('print', allowedGlobals: ['_G']) }.to raise_error(
+        an_instance_of(SweetMoon::Errors::LuaRuntimeError),
+        /unknown identifier in strict mode: print/
+      )
+
+      expect { fennel.eval('print', 2, allowedGlobals: ['_G']) }.to raise_error(
+        an_instance_of(SweetMoon::Errors::LuaRuntimeError),
+        /unknown identifier in strict mode: print/
+      )
+
+      expect(fennel.eval('(values "a" "b")', 2)).to eq(%w[a b])
+      expect(fennel.eval('(values "a" "b")', 1)).to eq('a')
+
+      expect(fennel.eval('(values "a" "b")', { outputs: 2 })).to eq(%w[a b])
+
+      expect(fennel.eval('(values "a" "b")', { outputs: 1 })).to eq('a')
+
+      expect(fennel.load('spec/dsl/examples/values.fnl')).to eq('a')
+      expect(fennel.load('spec/dsl/examples/values.fnl', 2)).to eq(%w[a b])
+
+      expect(
+        fennel.load('spec/dsl/examples/values.fnl', { outputs: 2 })
+      ).to eq(%w[a b])
+    end
+  end
+
   context 'local Fennel' do
     it do
       config = YAML.load_file('config/tests.yml')
