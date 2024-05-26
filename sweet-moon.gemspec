@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.license = Logic::Spec[:license]
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.5.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.1.0')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'ports/in/shell'
   spec.executables   = %w[sweet-moon]
 
-  spec.add_dependency 'ffi', '~> 1.15', '>= 1.15.5'
+  spec.add_dependency 'ffi', '~> 1.16', '>= 1.16.3'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
