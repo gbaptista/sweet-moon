@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sweet-moon (0.0.7)
+    sweet-moon (1.0.0)
       ffi (~> 1.17)
 
 GEM

@@ -5,12 +5,12 @@ require './dsl/sweet_moon'
 RSpec.describe do
   context 'meta' do
     it do
-      expect(SweetMoon.meta.version).to eq('0.0.7')
+      expect(SweetMoon.meta.version).to eq('1.0.0')
       expect(SweetMoon.meta.api_references).to eq(['3.2.2', '4.0.1', '5.0.3', '5.1.4', '5.4.2'])
       expect(SweetMoon.meta.interpreters).to eq(['5.0', '5.1', '5.4'])
 
       expect(SweetMoon.meta.to_h).to eq(
-        version: '0.0.7',
+        version: '1.0.0',
         api_references: ['3.2.2', '4.0.1', '5.0.3', '5.1.4', '5.4.2'],
         interpreters: ['5.0', '5.1', '5.4']
       )
@@ -50,7 +50,7 @@ RSpec.describe do
 
   context 'local api' do
     it do
-      expect(SweetMoon.meta.version).to eq('0.0.7')
+      expect(SweetMoon.meta.version).to eq('1.0.0')
 
       config = YAML.load_file('config/tests.yml')
 
@@ -82,7 +82,7 @@ RSpec.describe do
     it do
       SweetMoon.global.clear
 
-      expect(SweetMoon.meta.version).to eq('0.0.7')
+      expect(SweetMoon.meta.version).to eq('1.0.0')
 
       config = YAML.load_file('config/tests.yml')
 
@@ -120,7 +120,7 @@ RSpec.describe do
 
       SweetMoon.global.clear
 
-      expect(SweetMoon.meta.version).to eq('0.0.7')
+      expect(SweetMoon.meta.version).to eq('1.0.0')
 
       SweetMoon.global.config(shared_object: config['5.4.4']['shared_object'])
 
