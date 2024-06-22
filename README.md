@@ -1538,6 +1538,16 @@ bundle exec sweet-moon signatures /lua/lib/542 542.rb
 bundle exec ruby some/file.rb
 ```
 
+### Publish to RubyGems
+
+```bash
+gem build sweet-moon.gemspec
+
+gem signin
+
+gem push sweet-moon-1.0.0.gem
+```
+
 ### Supporting New Versions
 
 Download both the source code and the libraries.
