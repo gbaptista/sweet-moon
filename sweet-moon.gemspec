@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'ports/in/shell'
   spec.executables   = %w[sweet-moon]
 
-  spec.add_dependency 'ffi', '~> 1.16', '>= 1.16.3'
+  spec.add_dependency 'ffi', '~> 1.17'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
