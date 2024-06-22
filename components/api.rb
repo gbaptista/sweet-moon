@@ -80,7 +80,7 @@ module Component
         }
       end
 
-      { api: api, signatures: signatures }
+      { api:, signatures: }
     }
   }
 end

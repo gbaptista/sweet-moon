@@ -50,7 +50,7 @@ module Component
               }
             )
           end
-          return 1
+          1
         }
       },
 

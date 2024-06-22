@@ -18,7 +18,7 @@ module Logic
           interpreter[:version].to_s == options[:interpreter]
         end
 
-        if interpreters.size.zero?
+        if interpreters.empty?
           return {
             compatible: false,
             error: "Interpreter #{options[:interpreter]} not available."

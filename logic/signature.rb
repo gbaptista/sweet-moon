@@ -66,7 +66,7 @@ module Logic
       primitive = parts[base_index].gsub(';', '')
       type = parts[base_index + 1].gsub(';', '')
 
-      { type: type, primitive: primitive }
+      { type:, primitive: }
     },
 
     extract_types_from_header: ->(source, types = {}) {
@@ -104,7 +104,7 @@ module Logic
 
           buffer = 100
 
-          while signature.scan(/\(/).size != signature.scan(/\)/).size &&
+          while signature.scan('(').size != signature.scan(')').size &&
                 buffer.positive?
 
             signature = "#{signature} #{source.lines[current_index]}"
@@ -113,7 +113,7 @@ module Logic
             buffer -= 1
           end
 
-          signature = signature.gsub(/\n/, ' ').gsub(/\s+/, ' ').strip
+          signature = signature.gsub("\n", ' ').gsub(/\s+/, ' ').strip
 
           signatures << signature
         end
@@ -226,8 +226,8 @@ module Logic
 
       parameter[:type] = parts.pop
 
-      parameter[:name] = parameter[:name].sub(/\*/, '') if parameter[:name]
-      parameter[:type] = parameter[:type].sub(/\*/, '') if parameter[:type]
+      parameter[:name] = parameter[:name].sub('*', '') if parameter[:name]
+      parameter[:type] = parameter[:type].sub('*', '') if parameter[:type]
 
       parameter[:primitive] = parameter[:type]
 
@@ -252,7 +252,7 @@ module Logic
 
       return nil if function_name.nil? || output[:type].nil?
 
-      { name: function_name, output: output }
+      { name: function_name, output: }
     }
   }
 end

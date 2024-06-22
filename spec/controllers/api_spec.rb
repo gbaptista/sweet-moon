@@ -24,9 +24,9 @@ RSpec.describe do
 
       expect(component[:signatures].size).to be > 100
 
-      expect(component[:api].respond_to?(:luaL_newstate)).to eq(true)
-      expect(component[:api].respond_to?(:lua_pop)).to eq(true)
-      expect(component[:api].respond_to?(:luaH_new)).to eq(false)
+      expect(component[:api].respond_to?(:luaL_newstate)).to be(true)
+      expect(component[:api].respond_to?(:lua_pop)).to be(true)
+      expect(component[:api].respond_to?(:luaH_new)).to be(false)
 
       expect(component[:signatures][:luaL_newstate].keys).to eq(
         %i[source input output]
@@ -37,7 +37,7 @@ RSpec.describe do
       )
 
       expect(component[:signatures][:lua_tocfunction][:output]).to eq(:cfunction)
-      expect(component[:signatures][:luaH_new]).to eq(nil)
+      expect(component[:signatures][:luaH_new]).to be_nil
     end
   end
 
@@ -61,14 +61,14 @@ RSpec.describe do
 
       expect(component[:signatures].size).to be > 100
 
-      expect(component[:api].respond_to?(:luaH_new)).to eq(true)
-      expect(component[:api].respond_to?(:luaL_newstate)).to eq(false)
+      expect(component[:api].respond_to?(:luaH_new)).to be(true)
+      expect(component[:api].respond_to?(:luaL_newstate)).to be(false)
 
       expect(component[:signatures][:luaH_new].keys).to eq(
         %i[source input output]
       )
 
-      expect(component[:signatures][:luaL_newstate]).to eq(nil)
+      expect(component[:signatures][:luaL_newstate]).to be_nil
     end
   end
 
@@ -82,7 +82,7 @@ RSpec.describe do
         shared_objects ||= [config[version]['shared_object']]
 
         component = Controller::API[:handle!].(
-          shared_objects: shared_objects
+          shared_objects:
         )
 
         expect(component.keys).to eq(%i[api signatures meta])
@@ -92,7 +92,7 @@ RSpec.describe do
         expect(component[:meta][:elected]).to eq(
           {
             api_reference: version,
-            shared_objects: shared_objects
+            shared_objects:
           }
         )
       end
@@ -106,7 +106,7 @@ RSpec.describe do
   end
 
   context 'Dangerous combinations: 4.0.1 + 5.4.4' do
-    it 'segmentation fault', skip: true do
+    it 'segmentation fault', :skip do
       config = YAML.load_file('config/tests.yml')
 
       Controller::API[:handle!].(

@@ -4,9 +4,7 @@ RSpec.describe do
   it do
     expect(Logic::Signature[:extract_from_source].(
              '#define ERRNO_SAVE int olderr = errno; DWORD oldwerr = GetLastError();'
-           )).to eq(
-             nil
-           )
+           )).to be_nil
 
     expect(Logic::Signature[:extract_from_source].(
              '#define lua_getlocaledecpoint()    (localeconv()->decimal_point[0])'
@@ -154,9 +152,9 @@ RSpec.describe do
            )).to eq([:lua_pushnumber, %i[pointer double], :void])
 
     expect(Logic::Signature[:extract_types_from_header].(
-             'typedef struct Token {' \
-             '  int token;' \
-             '  SemInfo seminfo;' \
+             'typedef struct Token {  ' \
+             'int token;  ' \
+             'SemInfo seminfo;' \
              '} Token;'
            )).to eq({ 'Token' => 'struct' })
 
@@ -178,7 +176,7 @@ RSpec.describe do
 
     expect(Logic::Signature[:extract_type_from_source].(
              'typedef enum {'
-           )).to eq(nil)
+           )).to be_nil
 
     expect(Logic::Signature[:extract_type_from_source].(
              'typedef   int (*lua_CFunction) (lua_State *L);'
@@ -241,7 +239,7 @@ RSpec.describe do
 
     expect(Logic::Signature[:extract_from_source].(
              '    luaL_argerror(L, numarg,extramsg)'
-           )).to eq(nil)
+           )).to be_nil
 
     expect(Logic::Signature[:extract_from_source].(
              'void luaG_aritherror (lua_State *L, const TObject *p1, const TObject *p2);'

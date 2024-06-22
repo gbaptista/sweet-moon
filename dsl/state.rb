@@ -77,7 +77,7 @@ module DSL
 
       options.delete(:outputs)
 
-      { options: options, outputs: outputs }
+      { options:, outputs: }
     end
 
     def _ensure_min_version!(purpose, lua, jit = nil)
@@ -122,7 +122,7 @@ module DSL
       {
         api_reference: api_component[:meta][:elected][:api_reference],
         shared_objects: api_component[:meta][:elected][:shared_objects],
-        global_ffi: global_ffi
+        global_ffi:
       }
     end
 

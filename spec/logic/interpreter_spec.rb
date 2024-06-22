@@ -21,7 +21,7 @@ RSpec.describe do
     result = Logic::Interpreter[:elect].(signatures, '5.4.1')
 
     expect(result.keys).to match(%i[compatible error])
-    expect(result[:compatible]).to eq(false)
+    expect(result[:compatible]).to be(false)
     expect(result[:error]).to match(
       /No compatible interpreter found for Lua C API 5\.4\.1/
     )

@@ -58,7 +58,7 @@ RSpec.describe do
 
       expect(api.functions.size).to be > 150
       expect(api.signature_for(:luaL_gsub).keys).to eq(%i[source input output])
-      expect(api.signature_for(:luaH_new)).to eq(nil)
+      expect(api.signature_for(:luaH_new)).to be_nil
 
       expect(api.meta.to_h).to eq(
         api_reference: '5.4.2', shared_objects: [config['5.4.4']['shared_object']],
@@ -73,7 +73,7 @@ RSpec.describe do
       )
 
       expect(api_b.functions.size).to be > 150
-      expect(api_b.signature_for(:luaL_gsub)).to eq(nil)
+      expect(api_b.signature_for(:luaL_gsub)).to be_nil
       expect(api_b.signature_for(:luaH_new).keys).to eq(%i[source input output])
     end
   end
@@ -110,7 +110,7 @@ RSpec.describe do
       )
 
       expect(SweetMoon.global.api.functions.size).to be > 150
-      expect(SweetMoon.global.api.signature_for(:luaL_gsub)).to eq(nil)
+      expect(SweetMoon.global.api.signature_for(:luaL_gsub)).to be_nil
     end
   end
 
@@ -125,16 +125,16 @@ RSpec.describe do
       SweetMoon.global.config(shared_object: config['5.4.4']['shared_object'])
 
       expect(SweetMoon.global.state.eval('return 1 + 2')).to eq(3)
-      expect(SweetMoon.global.state.eval('value = "a b"')).to eq(nil)
+      expect(SweetMoon.global.state.eval('value = "a b"')).to be_nil
       expect(SweetMoon.global.state.get(:value)).to eq('a b')
 
       SweetMoon.global.config(shared_object: config['5.4.4']['shared_object'])
 
-      expect(SweetMoon.global.state.get(:value)).to eq(nil)
+      expect(SweetMoon.global.state.get(:value)).to be_nil
 
       expect(SweetMoon.global.state.eval('return 1 + 2')).to eq(3)
 
-      expect(SweetMoon.global.state.eval('value = "a b"')).to eq(nil)
+      expect(SweetMoon.global.state.eval('value = "a b"')).to be_nil
       expect(SweetMoon.global.state.get(:value)).to eq('a b')
 
       SweetMoon.global.config
@@ -143,17 +143,17 @@ RSpec.describe do
 
       SweetMoon.global.config(interpreter: '5.4')
 
-      expect(SweetMoon.global.state.get(:value)).to eq(nil)
+      expect(SweetMoon.global.state.get(:value)).to be_nil
 
       expect(SweetMoon.global.state.eval('return 1 + 1')).to eq(2)
 
-      expect(SweetMoon.global.state.eval('value = "a b"')).to eq(nil)
+      expect(SweetMoon.global.state.eval('value = "a b"')).to be_nil
       expect(SweetMoon.global.state.get(:value)).to eq('a b')
 
-      expect(SweetMoon.global.state.clear).to eq(nil)
+      expect(SweetMoon.global.state.clear).to be_nil
 
-      expect(SweetMoon.global.state.get(:value)).to eq(nil)
-      expect(SweetMoon.global.state.eval('value = "a b"')).to eq(nil)
+      expect(SweetMoon.global.state.get(:value)).to be_nil
+      expect(SweetMoon.global.state.eval('value = "a b"')).to be_nil
     end
   end
 end

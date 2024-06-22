@@ -38,7 +38,8 @@ module Component
         return 'number' if value.is_a? Float
         return 'table' if value.is_a?(Hash) || value.is_a?(Array)
         return 'string' if value.is_a?(String) || value.instance_of?(Symbol)
-        return 'boolean' if [true, false].include? value
+
+        'boolean' if [true, false].include? value
       }
     }
   end

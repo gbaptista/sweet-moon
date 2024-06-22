@@ -20,7 +20,7 @@ module Controller
 
     build_meta!: ->(component, options) {
       component[:meta] = {
-        options: options,
+        options:,
         elected: {
           interpreter: component[:interpreter][:version]
         },
@@ -62,7 +62,7 @@ module Controller
               result[:error]
       end
 
-      return Component::Interpreters[result[:version]][:interpreter]
+      Component::Interpreters[result[:version]][:interpreter]
     }
   }
 end

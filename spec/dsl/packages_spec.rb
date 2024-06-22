@@ -11,13 +11,13 @@ RSpec.describe do
 
       expect(state.eval('return 1 + 2')).to eq(3)
 
-      expect(state.add_package_path(config['5.4.2']['fennel'])).to eq(nil)
+      expect(state.add_package_path(config['5.4.2']['fennel'])).to be_nil
 
       expect(state.package_path).to include(config['5.4.2']['fennel'])
 
       expect(state.eval('return 1 + 2')).to eq(3)
 
-      expect(state.require_module(:fennel)).to eq(nil)
+      expect(state.require_module(:fennel)).to be_nil
       expect(state.eval('return 1 + 2')).to eq(3)
 
       expect(state.eval('return fennel.eval("(+ 1 1)");')).to eq(2)
@@ -55,18 +55,18 @@ RSpec.describe do
 
       expect(state.get(:a)).to eq(1)
 
-      expect(state.require_module_as('fennel', 'f')).to eq(nil)
+      expect(state.require_module_as('fennel', 'f')).to be_nil
 
       expect(state.eval('return f.eval("(+ 2 3)");')).to eq(5)
 
       expect(state.get(:f, :version)).to eq('1.0.0')
       expect(state.eval('return f.eval("(+ 2 3)");')).to eq(5)
-      expect(state.get(:f, :lorem)).to eq(nil)
+      expect(state.get(:f, :lorem)).to be_nil
       expect(state.eval('return f.eval("(+ 2 3)");')).to eq(5)
 
       expect(state.get(:f, :eval).(['(+ 2 2)'])).to eq(4)
 
-      expect(state.add_package_cpath('/lib/lib.so')).to eq(nil)
+      expect(state.add_package_cpath('/lib/lib.so')).to be_nil
       expect(state.package_cpath).to include('/lib/lib.so')
     end
   end

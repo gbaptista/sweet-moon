@@ -46,8 +46,8 @@ module DSL
       @state.respond_to? method_name
     end
 
-    def method_missing(method_name, *arguments, &block)
-      @state.public_send(method_name, *arguments, &block)
+    def method_missing(method_name, ...)
+      @state.public_send(method_name, ...)
     end
   end
 end

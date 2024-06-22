@@ -26,7 +26,7 @@ module Component
         when 'number'
           component::Reader[:read_number!].(api, state, stack_index)
         when 'no value'
-          { value: nil, pop: true, type: type }
+          { value: nil, pop: true, type: }
         when 'nil'
           { value: nil, pop: true }
         when 'boolean'
@@ -40,7 +40,7 @@ module Component
           # string table function userdata thread
           { value:
               "#{type}: 0x#{api.lua_topointer(state[:lua], stack_index).address}",
-            type: type, pop: true }
+            type:, pop: true }
         end
       },
 

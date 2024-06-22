@@ -11,8 +11,8 @@ module Port
         when 'version' then Controller::CLI::Version[:handle!].()
         when 'signatures' then Controller::CLI::Signatures[:handle!].(ARGV[1],
                                                                       ARGV[2])
-        when 'lua' then Controller::CLI::CLI[:handle!].(ARGV[1..-1])
-        when 'fennel' then Controller::CLI::CLI[:handle!].(ARGV[1..-1], true)
+        when 'lua' then Controller::CLI::CLI[:handle!].(ARGV[1..])
+        when 'fennel' then Controller::CLI::CLI[:handle!].(ARGV[1..], true)
         else; Controller::CLI::Help[:handle!].()
         end
       }

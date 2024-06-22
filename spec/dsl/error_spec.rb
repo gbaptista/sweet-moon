@@ -33,7 +33,7 @@ RSpec.describe do
       )
 
       expect do
-        expect(SweetMoon.global.state.destroy).to eq(nil)
+        expect(SweetMoon.global.state.destroy).to be_nil
       end.to raise_error(NoMethodError)
     end
   end
@@ -109,8 +109,8 @@ RSpec.describe do
         SweetMoon.global.state.eval('return 1 + true')
       end.to raise_error(
         an_instance_of(SweetMoon::Errors::LuaRuntimeError),
-        '[string "return 1 + true"]:1: attempt to perform' \
-        ' arithmetic on a boolean value'
+        '[string "return 1 + true"]:1: attempt to perform ' \
+        'arithmetic on a boolean value'
       )
 
       expect(SweetMoon.global.state.eval('return 1 + 1')).to eq(2)

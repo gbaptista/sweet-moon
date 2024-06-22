@@ -22,7 +22,7 @@ Metrics/ModuleLength:
   Enabled: false
 
 Metrics/BlockLength:
-  IgnoredMethods: ['describe', 'context', 'it']
+  AllowedMethods: ['describe', 'context', 'it']
 
 Style/DocumentDynamicEvalDefinition:
   Enabled: false

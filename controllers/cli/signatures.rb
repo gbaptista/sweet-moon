@@ -69,7 +69,7 @@ module Controller
 
         Port::Out::Shell[:dispatch!].("\n#{primitives.size} primitives:\n")
         Port::Out::Shell[:dispatch!].(
-          YAML.dump(primitives).lines[1..-1].map { |line| "  #{line}" }
+          YAML.dump(primitives).lines[1..].map { |line| "  #{line}" }
         )
       },
 
@@ -126,7 +126,7 @@ module Controller
           missing << function unless attachables[function.to_sym]
         end
 
-        { attachables: attachables, macros: macros, missing: missing }
+        { attachables:, macros:, missing: }
       },
 
       functions_from_shared_objects!: ->(path) {

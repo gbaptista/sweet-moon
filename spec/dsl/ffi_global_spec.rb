@@ -4,7 +4,7 @@ require './dsl/sweet_moon'
 
 RSpec.describe do
   context 'readline' do
-    context 'isolated state', skip: true do
+    context 'isolated state', :skip do
       it do
         SweetMoon.global.clear
 

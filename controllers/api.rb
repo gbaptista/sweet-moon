@@ -31,7 +31,7 @@ module Controller
       component = Component::API[:attach!].(api, api_reference, injections)
 
       component[:meta] = {
-        options: options,
+        options:,
         elected: {
           shared_objects: shared_objects.map { |o| o[:path] },
           api_reference: api_reference[:version]
@@ -49,15 +49,15 @@ module Controller
         candidates = paths
 
         shared_objects = Component::IO[:reject_non_existent!].(paths).map do |path|
-          { path: path }
+          { path: }
         end
       else
         bases = %w[/usr/lib /usr/lib/* /usr/local/lib /opt/local/lib]
 
         # XDG
-        if ENV['HOME']
-          bases << "#{ENV['HOME']}/.local/lib"
-          bases << "#{ENV['HOME']}/.local/lib/*"
+        if Dir.home
+          bases << "#{Dir.home}/.local/lib"
+          bases << "#{Dir.home}/.local/lib/*"
         end
 
         bases.each do |base|
@@ -70,7 +70,7 @@ module Controller
         shared_objects = Logic::SharedObject[:choose].(candidates)
       end
 
-      if shared_objects.size.zero?
+      if shared_objects.empty?
         raise SweetMoon::Errors::SweetMoonError,
               "Lua shared object (liblua.so) not found: #{candidates}"
       end
@@ -86,7 +86,7 @@ module Controller
           candidate[:version] == api_reference
         end
 
-        if availabe_candidates.size.zero?
+        if availabe_candidates.empty?
           raise SweetMoon::Errors::SweetMoonError,
                 "API Reference #{api_reference} not available."
         end

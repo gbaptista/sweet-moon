@@ -44,10 +44,10 @@ RSpec.describe do
       )
 
       ruby_fn = lambda do |a, b|
-        return a + b
+        a + b
       end
 
-      sum_list = ->(list) { list.sum }
+      sum_list = lambda(&:sum)
 
       state.set(:rubyFn, ruby_fn) # => nil
       state.set(:sumList, sum_list) # => nil

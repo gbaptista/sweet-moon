@@ -68,7 +68,7 @@ RSpec.describe do
       )
 
       expect(fennel.eval('(+ 1 1)')).to eq(2)
-      expect(fennel.eval('(global fl 3)')).to eq(nil)
+      expect(fennel.eval('(global fl 3)')).to be_nil
       expect(fennel.get(:fl)).to eq(3)
 
       expect(fennel.load('spec/dsl/examples/read.fnl')).to eq({ 'b' => 2 })
@@ -114,7 +114,7 @@ RSpec.describe do
       )
 
       expect(fennel.eval('(+ 1 1)')).to eq(2)
-      expect(fennel.eval('(global fl 3)')).to eq(nil)
+      expect(fennel.eval('(global fl 3)')).to be_nil
       expect(fennel.get(:fl)).to eq(3)
 
       expect(fennel.load('spec/dsl/examples/read.fnl')).to eq({ 'b' => 2 })

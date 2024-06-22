@@ -1,4 +1,4 @@
-require_relative './io'
+require_relative 'io'
 
 module Logic
   SharedObject = {
@@ -47,7 +47,7 @@ module Logic
         Gem::Version.new(raw_inferred_version || '0')
       end
 
-      { path: path,
+      { path:,
         inferences: { jit: !path[/jit/].nil?, version: inferred_version } }
     }
   }

@@ -19,17 +19,17 @@ module Component
 
       open_standard_libraries!: ->(api, state) {
         api.luaL_openlibs(state[:lua])
-        { state: state }
+        { state: }
       },
 
       load_file_and_push_chunck!: ->(api, state, path) {
         result = api.luaL_loadfile(state[:lua], path)
-        { state: state, error: Interpreter[:_error].(api, state, result, pull: true) }
+        { state:, error: Interpreter[:_error].(api, state, result, pull: true) }
       },
 
       push_chunk!: ->(api, state, value) {
         result = api.luaL_loadstring(state[:lua], value)
-        { state: state, error: Interpreter[:_error].(api, state, result, pull: true) }
+        { state:, error: Interpreter[:_error].(api, state, result, pull: true) }
       },
 
       set_table!: ->(api, state) {
@@ -37,20 +37,20 @@ module Component
 
         api.lua_settop(state[:lua], -2)
 
-        { state: state,
+        { state:,
           error: Interpreter[:_error].(api, state, result, pull: false) }
       },
 
       push_value!: ->(api, state, value) {
         Writer[:push!].(api, state, Component::V51, value)
-        { state: state }
+        { state: }
       },
 
       pop_and_set_as!: ->(api, state, variable) {
         api.lua_pushstring(state[:lua], variable)
         api.lua_insert(state[:lua], -2)
         api.lua_settable(state[:lua], Logic::V51::Interpreter[:LUA_GLOBALSINDEX])
-        { state: state }
+        { state: }
       },
 
       get_variable_and_push!: ->(api, state, variable, key = nil) {
@@ -66,12 +66,12 @@ module Component
           end
         end
 
-        { state: state, extra_pop: true }
+        { state:, extra_pop: true }
       },
 
       call!: ->(api, state, inputs = 0, outputs = 1) {
         result = api.lua_pcall(state[:lua], inputs, outputs, 0)
-        { state: state, error: Interpreter[:_error].(api, state, result, pull: true) }
+        { state:, error: Interpreter[:_error].(api, state, result, pull: true) }
       },
 
       read_and_pop!: ->(api, state, stack_index = -1, extra_pop: false) {
@@ -80,13 +80,13 @@ module Component
         api.lua_settop(state[:lua], -2) if result[:pop]
         api.lua_settop(state[:lua], -2) if extra_pop
 
-        { state: state, output: result[:value] }
+        { state:, output: result[:value] }
       },
 
       read_all!: ->(api, state) {
         result = Reader[:read_all!].(api, state, Component::V51)
 
-        { state: state, output: result }
+        { state:, output: result }
       },
 
       destroy_state!: ->(api, state) {
@@ -104,9 +104,9 @@ module Component
         ] || :error
 
         if code.is_a?(Numeric) && code >= 2
-          return { status: status } unless options[:pull] && state
+          return { status: } unless options[:pull] && state
 
-          { status: status,
+          { status:,
             value: Interpreter[:read_and_pop!].(api, state, -1)[:output] }
         end
       }

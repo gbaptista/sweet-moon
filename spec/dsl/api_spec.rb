@@ -23,10 +23,10 @@ RSpec.describe do
 
       expect(api.signature_for(:luaL_newstate).keys).to eq(%i[source input output])
       expect(api.signature_for('luaL_newstate').keys).to eq(%i[source input output])
-      expect(api.signature_for(:lua_setstate)).to eq(nil)
+      expect(api.signature_for(:lua_setstate)).to be_nil
 
-      expect(api.respond_to?(:luaL_newstate)).to eq(true)
-      expect(api.respond_to?(:lua_setstate)).to eq(false)
+      expect(api.respond_to?(:luaL_newstate)).to be(true)
+      expect(api.respond_to?(:lua_setstate)).to be(false)
     end
   end
 
@@ -47,13 +47,13 @@ RSpec.describe do
 
       expect(api.functions).to include(:lua_setstate)
 
-      expect(api.signature_for(:luaL_newstate)).to eq(nil)
+      expect(api.signature_for(:luaL_newstate)).to be_nil
 
       expect(api.signature_for(:lua_setstate).keys).to eq(%i[source input output])
       expect(api.signature_for('lua_setstate').keys).to eq(%i[source input output])
 
-      expect(api.respond_to?(:lua_setstate)).to eq(true)
-      expect(api.respond_to?(:luaL_newstate)).to eq(false)
+      expect(api.respond_to?(:lua_setstate)).to be(true)
+      expect(api.respond_to?(:luaL_newstate)).to be(false)
     end
   end
 
@@ -68,12 +68,12 @@ RSpec.describe do
       state = api.luaL_newstate
 
       expect(state.class).to eq(FFI::Pointer)
-      expect(api.luaL_openlibs(state)).to eq(nil)
+      expect(api.luaL_openlibs(state)).to be_nil
       expect(api.luaL_loadstring(state, 'return math.pow(2, 3);')).to eq(0)
       expect(api.lua_pcall(state, 0, 1, 0)).to eq(0)
       expect(api.lua_tonumber(state, -1)).to eq(8.0)
-      expect(api.lua_pop(state)).to eq(nil)
-      expect(api.lua_close(state)).to eq(nil)
+      expect(api.lua_pop(state)).to be_nil
+      expect(api.lua_close(state)).to be_nil
     end
   end
 end
