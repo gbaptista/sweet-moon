@@ -16,7 +16,7 @@ RSpec.describe do
         shared_objects: [config['5.4.4']['shared_object']],
         api_reference: '5.4.2',
         interpreter: '5.4',
-        runtime: 'Fennel 1.0.1-dev on Lua 5.4',
+        runtime: 'Fennel 1.4.2 on Lua 5.4',
         global_ffi: false
       )
 
@@ -24,12 +24,12 @@ RSpec.describe do
 
       expect { fennel.eval('print', allowedGlobals: ['_G']) }.to raise_error(
         an_instance_of(SweetMoon::Errors::LuaRuntimeError),
-        /unknown identifier in strict mode: print/
+        /unknown identifier.*print/
       )
 
       expect { fennel.eval('print', 2, allowedGlobals: ['_G']) }.to raise_error(
         an_instance_of(SweetMoon::Errors::LuaRuntimeError),
-        /unknown identifier in strict mode: print/
+        /unknown identifier.*print/
       )
 
       expect(fennel.eval('(values "a" "b")', 2)).to eq(%w[a b])

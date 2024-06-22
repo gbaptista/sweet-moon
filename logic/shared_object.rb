@@ -23,7 +23,9 @@ module Logic
         end
       end
 
-      elected = candidates.max_by do |candidate|
+      elected = candidates.filter do |candidate|
+        candidate[:path] !~ /\+\+/ # Exclude C++ Shared Objects
+      end.max_by do |candidate|
         Gem::Version.new(candidate[:inferences][:version] || '0')
       end
 

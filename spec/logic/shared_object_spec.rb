@@ -3,6 +3,10 @@ require './logic/shared_object'
 RSpec.describe do
   before do
     @candidate_paths = [
+      '/usr/lib/liblua++.so',
+      '/usr/lib/liblua++.so.5.4',
+      '/usr/lib/liblua++.so.5.4.6',
+      '/usr/lib/liblua++5.4.so',
       '/usr/lib/liblua.so',
       '/usr/lib/liblua.so.5.2',
       '/usr/lib/liblua.so.5.2.4',
@@ -10,6 +14,7 @@ RSpec.describe do
       '/usr/lib/liblua.so.5.3.6',
       '/usr/lib/liblua.so.5.4',
       '/usr/lib/liblua.so.5.4.4',
+      '/usr/lib/liblua.so.5.4.6',
       '/usr/lib/liblua5.2.so',
       '/usr/lib/liblua5.2.so.5.2',
       '/usr/lib/liblua5.2.so.5.2.4',
@@ -19,7 +24,8 @@ RSpec.describe do
       '/usr/lib/liblua5.4.so',
       '/usr/lib/libluajit-5.1.so',
       '/usr/lib/libluajit-5.1.so.2',
-      '/usr/lib/libluajit-5.1.so.2.1.0'
+      '/usr/lib/libluajit-5.1.so.2.1.0',
+      '/usr/lib/libluajit-5.1.so.2.1.1713773202'
     ]
   end
 
@@ -53,6 +59,10 @@ RSpec.describe do
       )
 
       expected_result = [
+        { path: '/usr/lib/liblua++.so', inferences: { jit: false, version: nil } },
+        { path: '/usr/lib/liblua++.so.5.4', inferences: { jit: false, version: '5.4' } },
+        { path: '/usr/lib/liblua++.so.5.4.6', inferences: { jit: false, version: '5.4.6' } },
+        { path: '/usr/lib/liblua++5.4.so', inferences: { jit: false, version: '5.4' } },
         { path: '/usr/lib/liblua.so', inferences: { jit: false, version: nil } },
         { path: '/usr/lib/liblua.so.5.2', inferences: { jit: false, version: '5.2' } },
         { path: '/usr/lib/liblua.so.5.2.4', inferences: { jit: false, version: '5.2.4' } },
@@ -60,6 +70,7 @@ RSpec.describe do
         { path: '/usr/lib/liblua.so.5.3.6', inferences: { jit: false, version: '5.3.6' } },
         { path: '/usr/lib/liblua.so.5.4', inferences: { jit: false, version: '5.4' } },
         { path: '/usr/lib/liblua.so.5.4.4', inferences: { jit: false, version: '5.4.4' } },
+        { path: '/usr/lib/liblua.so.5.4.6', inferences: { jit: false, version: '5.4.6' } },
         { path: '/usr/lib/liblua5.2.so', inferences: { jit: false, version: '5.2' } },
         { path: '/usr/lib/liblua5.2.so.5.2', inferences: { jit: false, version: '5.2' } },
         { path: '/usr/lib/liblua5.2.so.5.2.4', inferences: { jit: false, version: '5.2.4' } },
@@ -69,7 +80,8 @@ RSpec.describe do
         { path: '/usr/lib/liblua5.4.so', inferences: { jit: false, version: '5.4' } },
         { path: '/usr/lib/libluajit-5.1.so', inferences: { jit: true, version: '5.1' } },
         { path: '/usr/lib/libluajit-5.1.so.2', inferences: { jit: true, version: '5.1' } },
-        { path: '/usr/lib/libluajit-5.1.so.2.1.0', inferences: { jit: true, version: '5.1' } }
+        { path: '/usr/lib/libluajit-5.1.so.2.1.0', inferences: { jit: true, version: '5.1' } },
+        { path: '/usr/lib/libluajit-5.1.so.2.1.1713773202', inferences: { jit: true, version: '5.1' } }
       ]
 
       expect(
@@ -81,7 +93,7 @@ RSpec.describe do
   context 'choose' do
     it do
       expect(Logic::SharedObject[:choose].(@candidate_paths)).to eq(
-        [{ path: '/usr/lib/liblua.so.5.4.4', inferences: { jit: false, version: '5.4.4' } }]
+        [{ path: '/usr/lib/liblua.so.5.4.6', inferences: { jit: false, version: '5.4.6' } }]
       )
 
       expect(Logic::SharedObject[:choose].(@candidate_paths, jit: true)).to eq(
@@ -97,7 +109,7 @@ RSpec.describe do
       )
 
       expect(Logic::SharedObject[:choose].(@candidate_paths, version: '5')).to eq(
-        [{ path: '/usr/lib/liblua.so.5.4.4', inferences: { version: '5.4.4', jit: false } }]
+        [{ path: '/usr/lib/liblua.so.5.4.6', inferences: { version: '5.4.6', jit: false } }]
       )
 
       expect(
