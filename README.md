@@ -48,6 +48,7 @@ _Sweet Moon_ is a resilient solution that makes working with [Lua](https://www.l
 - [Development](#development)
   - [Tests Setup](#tests-setup)
   - [Running](#running)
+  - [Publish to RubyGems](#publish-to-rubygems)
   - [Supporting New Versions](#supporting-new-versions)
 
 ## Supported Versions
